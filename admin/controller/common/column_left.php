@@ -193,9 +193,6 @@ class ControllerCommonColumnLeft extends Controller {
 			$data['text_processing_status'] = $this->language->get('text_processing_status');
 			$data['text_other_status'] = $this->language->get('text_other_status');
 	
-			$this->load->model('sale/order');
-	
-			
 			return $this->load->view('common/column_left', $data);
 		}
 	}
