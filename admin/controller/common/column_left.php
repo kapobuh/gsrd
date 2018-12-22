@@ -160,13 +160,13 @@ class ControllerCommonColumnLeft extends Controller {
                 );
             }
 
-            if ($this->user->hasPermission('access', 'localisation/locality')) {
+            /*if ($this->user->hasPermission('access', 'localisation/locality')) {
                 $localisation[] = array(
                     'name'	   => $this->language->get('text_locality'),
                     'href'     => $this->url->link('localisation/locality', 'token=' . $this->session->data['token'], true),
                     'children' => array()
                 );
-            }
+            }*/
 
             if ($localisation) {
 				$system[] = array(
