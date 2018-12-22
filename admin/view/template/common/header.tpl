@@ -125,6 +125,14 @@
            }
          }
 
+        #sela-list {
+          display: none;
+        }
+
+      .psr-item {
+        cursor: pointer;
+      }
+
 	</style>
 </head>
 <body>

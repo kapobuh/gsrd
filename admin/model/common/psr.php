@@ -39,7 +39,7 @@ class ModelCommonPsr extends Model {
     }
 
     public function getPsr($psr_id) {
-	    $query = $this->db->query("SELECT psr.psr_id, psr.type_id, psr.psp_id, a.locality_id as locality, a.street, a.house, a.appartment, psr.date_start, psr.date_end, psr.participants as participant, psr.equipment, psr.description FROM nfo_psr psr LEFT JOIN nfo_address a ON psr.address_id = a.address_id INNER JOIN nfo_locality l ON a.locality_id = l.locality_id WHERE psr.psr_id = '" . (int)$psr_id . "'");
+	    $query = $this->db->query("SELECT psr.psr_id, psr.type_id, psr.psp_id, a.locality_id as locality, a.street, a.house, a.appartment, psr.date_start, psr.date_end, psr.participants as participant, psr.equipment, psr.description, l.parent_id as parent_id FROM nfo_psr psr LEFT JOIN nfo_address a ON psr.address_id = a.address_id INNER JOIN nfo_locality l ON a.locality_id = l.locality_id WHERE psr.psr_id = '" . (int)$psr_id . "'");
 
         $technic_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "psr_technics WHERE psr_id = '" . $psr_id . "'");
         if ($technic_query->num_rows) {
@@ -66,27 +66,34 @@ class ModelCommonPsr extends Model {
 
         if ($query->num_rows) {
 
-            $locality_name_query = $this->db->query("SELECT name FROM " . DB_PREFIX . "locality WHERE locality_id = '" . (int)$query->row['locality'] ."'");
+            $locality_name_query = $this->db->query("SELECT name FROM " . DB_PREFIX . "locality WHERE locality_id = '" . (int)$query->row['locality'] . "'");
 
-            $type_name_query = $this->db->query("SELECT name FROM " . DB_PREFIX . "incident_type  WHERE incidenttype_id = '" . (int)$query->row['type_id'] ."'");
+            $type_name_query = $this->db->query("SELECT name FROM " . DB_PREFIX . "incident_type  WHERE incidenttype_id = '" . (int)$query->row['type_id'] . "'");
 
-            return array (
-                'psr_id'        =>  $query->row['psr_id'],
-                'type_id'       =>  $query->row['type_id'],
-                'locality'      =>  $query->row['locality'],
-                'psp_id'        =>  $query->row['psp_id'],
-                'street'        =>  $query->row['street'],
-                'house'         =>  $query->row['house'],
-                'appartment'    =>  $query->row['appartment'],
-                'date_start'    =>  date("d.m.Y H:s", strtotime($query->row['date_start'])),
-                'date_end'      =>  date("d.m.Y H:s", strtotime($query->row['date_end'])),
-                'participant'   =>  $participants,
-                'equipments'    =>  explode("_", $query->row['equipment']),
-                'technic'       =>  $technic,
-                'injured'       =>  $injured,
-                'description'   =>  $query->row['description'],
-                'type_name'     =>  $type_name_query->row['name'],
-                'locality_name' =>  $locality_name_query->row['name']
+            if ($query->row['parent_id']) {
+                $locality_type_query = $this->db->query("SELECT name FROM " . DB_PREFIX . "locality  WHERE locality_id = '" . (int)$query->row['parent_id'] . "'");
+                $locality_name = $locality_type_query->row['name'] . ', ' . $locality_name_query->row['name'];
+            } else {
+                $locality_name = $locality_name_query->row['name'];
+            }
+
+            return array(
+                'psr_id' => $query->row['psr_id'],
+                'type_id' => $query->row['type_id'],
+                'locality' => $query->row['locality'],
+                'psp_id' => $query->row['psp_id'],
+                'street' => $query->row['street'],
+                'house' => $query->row['house'],
+                'appartment' => $query->row['appartment'],
+                'date_start' => date("d.m.Y H:s", strtotime($query->row['date_start'])),
+                'date_end' => date("d.m.Y H:s", strtotime($query->row['date_end'])),
+                'participant' => $participants,
+                'equipments' => explode("_", $query->row['equipment']),
+                'technic' => $technic,
+                'injured' => $injured,
+                'description' => $query->row['description'],
+                'type_name' => $type_name_query->row['name'],
+                'locality_name' => $locality_name
 
 
             );
@@ -215,6 +222,12 @@ GROUP BY inj.injured_type_id";
 
 
 
+    }
+
+    public function getSeloByDistrict($district_id) {
+	    $query = $this->db->query("SELECT `name`, locality_id as `selo_id` FROM " . DB_PREFIX . "locality WHERE parent_id = '".(int)$district_id."' AND `type` = '" . SELO_LOCALITY_TYPE . "'");
+
+	    return($query->rows);
     }
 
 

@@ -9,6 +9,8 @@ $_['text_add']         = 'Добавить';
 $_['text_edit']        = 'Редактирование';
 $_['text_gorod']        = 'Город';
 $_['text_district']        = 'Район';
+$_['text_vilage']        = 'Село';
+
 
 
 // Column

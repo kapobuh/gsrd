@@ -3,12 +3,23 @@ class ModelLocalisationLocality extends Model {
     public function addLocality($data) {
         foreach ($data['locality'] as $language_id => $value) {
             if (isset($locality_id)) {
-                $this->db->query("INSERT INTO " . DB_PREFIX . "locality SET locality_id = '" . (int)$locality_id . "', name = '" . $this->db->escape($value['name']) . "', type = '" . $this->db->escape($value['type']) . "'"); echo $this->db->escape($value['name']);
+                $this->db->query("INSERT INTO " . DB_PREFIX . "locality SET locality_id = '" . (int)$locality_id . "', name = '" . $this->db->escape($value['name']) . "', type = '" . $this->db->escape($value['type']) . "'");
+
+                if ((isset($data['district_id']) and ($data['type'] =='S'))) {
+                    $this->db->query("INSERT INTO " . DB_PREFIX . "vilage_district SET `vilage_id` = '" . $locality_id . "', locality_id = '" . (int)($data['district_id']) . "'");
+                }
+
             } else {
                 $this->db->query("INSERT INTO " . DB_PREFIX . "locality SET name = '" . $this->db->escape($value['name']) . "', type = '" . $this->db->escape($value['type']) . "'");
 
                 $locality_id = $this->db->getLastId();
+
+                if ((isset($data['district_id']) and ($data['type'] =='S'))) {
+                    $this->db->query("INSERT INTO " . DB_PREFIX . "vilage_district SET `vilage_id` = '" . $locality_id . "', locality_id = '" . (int)($data['district_id']) . "'");
+                }
             }
+
+
         }
 
         $this->cache->delete('locality');
@@ -18,9 +29,14 @@ class ModelLocalisationLocality extends Model {
 
     public function editLocality($locality_id, $data) {
         $this->db->query("DELETE FROM " . DB_PREFIX . "locality WHERE locality_id = '" . (int)$locality_id . "'");
+        $this->db->query("DELETE FROM " . DB_PREFIX . "vilage_district WHERE locality_id = '" . (int)$locality_id . "'");
 
         foreach ($data['locality'] as $language_id => $value) {
             $this->db->query("INSERT INTO " . DB_PREFIX . "locality SET locality_id = '" . (int)$locality_id . "', name = '" . $this->db->escape($value['name']) . "', type = '" . $this->db->escape($value['type']) . "'");
+
+            if ((isset($data['district_id']) and ($value['type'] =='S'))) {
+                $this->db->query("INSERT INTO " . DB_PREFIX . "vilage_district SET `vilage_id` = '" . $locality_id . "', locality_id = '" . (int)($data['district_id']) . "'");
+            }
         }
 
         $this->cache->delete('locality');
@@ -40,7 +56,7 @@ class ModelLocalisationLocality extends Model {
 
     public function getLocalitys($data = array()) {
         if ($data) {
-            $sql = "SELECT * FROM " . DB_PREFIX . "locality";
+            $sql = "SELECT * FROM " . DB_PREFIX . "locality l WHERE l.type IN ('".DISTRICT_LOCALITY_TYPE."','".CITY_LOCALITY_TYPE."')";
 
             $sql .= " ORDER BY name";
 
@@ -94,8 +110,20 @@ class ModelLocalisationLocality extends Model {
     }
 
     public function getTotalLocalitys() {
-        $query = $this->db->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "locality");
+        $query = $this->db->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "locality l WHERE l.type IN ('".DISTRICT_LOCALITY_TYPE."','".CITY_LOCALITY_TYPE."')");
 
         return $query->row['total'];
+    }
+
+    public function getLocalityDistrict($locality_id) {
+        $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "vilage_district WHERE vilage_id = '" . (int)$locality_id . "'");
+
+        if ($query->num_rows) {
+            return array (
+                'vilage_id' => $query->row['locality_id']
+            );
+        } else {
+            return false;
+        }
     }
 }

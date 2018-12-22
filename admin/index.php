@@ -7,6 +7,10 @@ if (is_file('config.php')) {
 	require_once('config.php');
 }
 
+if (is_file('consts.php')) {
+    require_once('consts.php');
+}
+
 // Install
 if (!defined('DIR_APPLICATION')) {
 	header('Location: ../install/index.php');

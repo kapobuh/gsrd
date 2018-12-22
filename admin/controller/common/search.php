@@ -317,7 +317,7 @@ class ControllerCommonSearch extends Controller {
 
             $psr_info = $this->model_common_psr->getPsr($this->request->get['psr_id']);
 
-            if ($psr_info) { // print_r($psr_info);
+            if ($psr_info) {
 
                 $data['heading_title'] = 'Поисково спасательная работа №' . $psr_info['psr_id'];
 

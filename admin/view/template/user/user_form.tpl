@@ -1,6 +1,6 @@
 <?php echo $header; ?><?php echo $column_left; ?>
 <div id="content">
-  <div class="page-header">
+  <div id="center_main_block" class="page-header">
     <div class="container-fluid">
       <div class="pull-right">
         <button type="submit" form="form-user" data-toggle="tooltip" title="<?php echo $button_save; ?>" class="btn btn-primary"><i class="fa fa-save"></i></button>
@@ -13,7 +13,7 @@
       </ul>
     </div>
   </div>
-  <div class="container-fluid">
+  <div id="center_main_block" class="container-fluid">
     <?php if ($error_warning) { ?>
     <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> <?php echo $error_warning; ?>
       <button type="button" class="close" data-dismiss="alert">&times;</button>

@@ -24,7 +24,7 @@
 
 					<br/>
 					<br/>
-					<table class="table">
+					<table class="table table-hover">
 					<?php if ($psrs) { ?>
 
 						<tr>
@@ -36,11 +36,11 @@
 						</tr>
 
 						<?php foreach($psrs as $psr) { ?>
-						<tr>
+						<tr alt="<?php echo $psr['psr_id']; ?>" class="psr_link psr-item">
 							<td class="text-center">
 								<input type="checkbox" name="selected[]" value="<?php echo $psr['psr_id']; ?>" />
 							</td>
-							<td><span alt="<?php echo $psr['psr_id']; ?>" class="psr_link"><?php echo $psr['name']; ?></span></td>
+							<td><span><?php echo $psr['name']; ?></span></td>
 							<td><?php echo $psr['address']; ?></td>
 							<td><?php echo $psr['psp']; ?></td>
 							<td><?php echo $psr['date_added']; ?></td>

@@ -202,6 +202,7 @@ class ControllerLocalisationLocality extends Controller {
         $data['text_form'] = !isset($this->request->get['locality_id']) ? $this->language->get('text_add') : $this->language->get('text_edit');
         $data['text_gorod'] = $this->language->get('text_gorod');
         $data['text_district'] = $this->language->get('text_district');
+        $data['text_vilage'] = $this->language->get('text_vilage');
 
         $data['entry_name'] = $this->language->get('entry_name');
         $data['entry_type'] = $this->language->get('entry_type');
@@ -221,15 +222,23 @@ class ControllerLocalisationLocality extends Controller {
             $data['error_name'] = array();
         }
 
+        $this->load->model('common/lists');
+
+        $districts_list = $this->model_common_lists->getDistrictList();
+
+        if ($districts_list) {
+            foreach ($districts_list as $district) {
+                $data['district_list'][] = array (
+                    'locality_id'   =>  $district['locality_id'],
+                    'name'          =>  $district['name']
+                );
+            }
+        } else {
+            $data['district_list'] = false;
+        }
+
         $url = '';
 
-        if (isset($this->request->get['sort'])) {
-            $url .= '&sort=' . $this->request->get['sort'];
-        }
-
-        if (isset($this->request->get['order'])) {
-            $url .= '&order=' . $this->request->get['order'];
-        }
 
         if (isset($this->request->get['page'])) {
             $url .= '&page=' . $this->request->get['page'];
@@ -268,6 +277,15 @@ class ControllerLocalisationLocality extends Controller {
             $data['locality'] = array();
         }
 
+
+        if (isset($this->request->post['district_id'])) {
+            $data['district_id'] = $this->request->post['district_id'];
+        } elseif (isset($this->request->get['locality_id'])) {
+            $data['district_id'] = $this->model_localisation_locality->getLocalityDistrict($this->request->get['locality_id']);
+        } else {
+            $data['district_id'] = false;
+        }
+
         $data['header'] = $this->load->controller('common/header');
         $data['column_left'] = $this->load->controller('common/column_left');
         $data['footer'] = $this->load->controller('common/footer');
@@ -284,7 +302,15 @@ class ControllerLocalisationLocality extends Controller {
             if ((utf8_strlen($value['name']) < 3) || (utf8_strlen($value['name']) > 32)) {
                 $this->error['name'][$language_id] = $this->language->get('error_name');
             }
+
+            if (isset($this->request->post['district_id'])) {
+                if (($this->request->post['district_id'] == '0') && ($value['type'] == 'S')) {
+                    $this->error['district'] = 'Выберите район!';
+                }
+            }
         }
+
+
 
         return !$this->error;
     }

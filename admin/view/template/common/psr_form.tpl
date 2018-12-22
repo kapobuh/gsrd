@@ -63,19 +63,30 @@
 					<div class="form-group required">
 						<label class="col-sm-3 control-label text-right" for="input-type"><?php echo $text_locality; ?></label>
 						<div class="col-sm-9">
-							<select class="form-control" name="locality">
+							<select class="form-control" name="locality" id="locality_list">
 								<?php if ($localitys) { ?>
 									<?php foreach ($localitys as $locality) { ?>
 										<?php if ($locality['locality_id'] == $locality_id) { ?>
-										<option selected value="<?php echo $locality['locality_id']; ?>"><?php echo $locality['name']; ?></option>
+										<option alt="<?php echo $locality['type']; ?>" value="<?php echo $locality['locality_id']; ?>" selected><?php echo $locality['name']; ?></option>
 										<?php } else { ?>
-										<option value="<?php echo $locality['locality_id']; ?>"><?php echo $locality['name']; ?></option>
+										<option alt="<?php echo $locality['type']; ?>" value="<?php echo $locality['locality_id']; ?>"><?php echo $locality['name']; ?></option>
 										<?php } ?>
 									<?php } ?>
 								<?php } ?>
 							</select>
 						</div>
 					</div>
+
+					<div class="form-group required" id="sela-list">
+						<label class="col-sm-3 control-label text-right" for="input-type">Село</label>
+						<div class="col-sm-9">
+							<select class="form-control" name="selo">
+
+							</select>
+						</div>
+					</div>
+
+
 					<div class="form-group required">
 						<label class="col-sm-3 control-label text-right" for="input-type"><?php echo $text_address; ?></label>
 						<div class="col-sm-3">
@@ -125,7 +136,7 @@
 						<label class="col-sm-3 control-label text-right" for="input-type"> </label>
 							<?php } ?>
 						<div class="col-sm-3">
-								<select name="participant[<?php echo $participant_row; ?>][t]" class="form-control">
+								<select id="participant-list" name="participant[<?php echo $participant_row; ?>][t]" class="form-control">
 									<?php if ($participant_types) { ?>
 										<?php foreach ($participant_types as $participant_type) { ?>
 											<?php if ($participant_type['participant_type_id'] == $participant['t']) { ?>
@@ -199,7 +210,7 @@
 							<?php } ?>
 
 							<div class="col-sm-3">
-								<select name="technic[<?php echo $technic_row; ?>][technic_id]" class="form-control">
+								<select id="technic-list" name="technic[<?php echo $technic_row; ?>][technic_id]" class="form-control">
 									<?php if ($technic_types) { ?>
 										<?php foreach ($technic_types as $technic_type) { ?>
 											<?php if ($technic_type['technic_type_id'] == $technic['technic_id']) { ?>
@@ -373,24 +384,28 @@
 	var participant_row = <?php echo $participant_row; ?>;
 
 	$('#add_line_participant').click(function(){
-        html = '<div class="form-group required" style="border-top: none;padding-top: 0px;" id="participant_block_'+ participant_row +'"><label class="col-sm-3 control-label text-right" for="input-type"></label><div class="col-sm-3"><select name="participant['+ participant_row +'][t]" class="form-control"><?php if ($participant_types) { ?><?php foreach ($participant_types as $participant_type) { ?><option value="<?php echo $participant_type['participant_type_id']; ?>"><?php echo $participant_type['name'];?></option><?php } ?><?php } ?></select></div><div class="col-sm-2"><input name="participant[' + participant_row + '][q]" class="form-control" type="number" min="1" value="1" placeholder="Количество"/></div><div class="col-sm-4"><button onclick="$(\'#participant_block_' + participant_row  + '\').remove();" data-toggle="tooltip" class="delete_element" type="button"><i class="fa fa-minus-circle"></i></button></div></div>';
+        html = '<div class="form-group required" style="border-top: none;padding-top: 0px;" id="participant_block_'+ participant_row +'"><label class="col-sm-3 control-label text-right" for="input-type"></label><div class="col-sm-3"><select name="participant['+ participant_row +'][t]" class="form-control"><?php if ($participant_types) { ?><?php foreach ($participant_types as $participant_type) { ?><option value="<?php echo $participant_type['participant_type_id']; ?>"><?php echo $participant_type['name'];?></option><?php } ?><?php } ?></select></div><div class="col-sm-2"><input name="participant[' + participant_row + '][q]" class="form-control" type="number" min="1" value="1" placeholder="Количество"/></div><div class="col-sm-4"><button onclick="$(\'#participant_block_' + participant_row  + '\').remove();participant_row--" data-toggle="tooltip" class="delete_element" type="button"><i class="fa fa-minus-circle"></i></button></div></div>';
 
-        $('#participants_block ').append(html);
-        $('#participant_error').remove();
+		if ($('#participant-list option').length > participant_row) {
+            $('#participants_block ').append(html);
+            $('#participant_error').remove();
+            participant_row++;
+		}
 
-        participant_row++;
 });
 
 
     var technic_row = <?php echo $technic_row; ?>;
 
     $('#add_line_technic').click(function(){
-        html = '<div class="form-group required" style="border-top: none;padding-top: 0px;" id="technic_block_'+ technic_row +'"><label class="col-sm-3 control-label text-right" for="input-type"></label><div class="col-sm-3"><select name="technic['+ technic_row +'][technic_id]" class="form-control"><?php if ($technic_types) { ?><?php foreach ($technic_types as $technic_type) { ?><option value="<?php echo $technic_type['technic_type_id']; ?>"><?php echo $technic_type['name'];?></option><?php } ?><?php } ?></select></div><div class="col-sm-2"><input name="technic[' + technic_row + '][quantity]" class="form-control" value="1" type="number" min="1" placeholder="Количество"/></div><div class="col-sm-4"><button onclick="$(\'#technic_block_' + technic_row  + '\').remove();" data-toggle="tooltip" class="delete_element" type="button"><i class="fa fa-minus-circle"></i></button></div></div>';
+        html = '<div class="form-group required" style="border-top: none;padding-top: 0px;" id="technic_block_'+ technic_row +'"><label class="col-sm-3 control-label text-right" for="input-type"></label><div class="col-sm-3"><select name="technic['+ technic_row +'][technic_id]" class="form-control"><?php if ($technic_types) { ?><?php foreach ($technic_types as $technic_type) { ?><option value="<?php echo $technic_type['technic_type_id']; ?>"><?php echo $technic_type['name'];?></option><?php } ?><?php } ?></select></div><div class="col-sm-2"><input name="technic[' + technic_row + '][quantity]" class="form-control" value="1" type="number" min="1" placeholder="Количество"/></div><div class="col-sm-4"><button onclick="$(\'#technic_block_' + technic_row  + '\').remove();technic_row--" data-toggle="tooltip" class="delete_element" type="button"><i class="fa fa-minus-circle"></i></button></div></div>';
 
-        $('#technics_block ').append(html);
-        $('#technic_error').remove();
+        if ($('#technic-list option').length > technic_row) {
+            $('#technics_block ').append(html);
+            $('#technic_error').remove();
 
-        technic_row++;
+            technic_row++;
+        }
     });
 
     var injured_row = <?php echo $injured_row; ?>;
@@ -427,6 +442,36 @@
             $('#add_line_injured').show();
 		}
 
+	});
+
+    $(document).ready(function(){
+        $('#locality_list').change(function(){
+			if (($('#locality_list').find(':selected').attr('alt')) == 'R') {
+				$.ajax({
+					url: '?route=common/psr/getSeloByDistrict',
+					type: 'get',
+					data: {
+						district_id: $('#locality_list').find(':selected').val(),
+                        token:		 '<?php echo $token; ?>'
+					},
+					success: function(json) {
+					    $('#sela-list').show();
+					    html = '';
+					    json.forEach(function(indx, el) {
+                            id = indx['selo_id'];
+					        name = indx['name'];
+					        html = html + '<option value="' + id + '">' + name + '</option>';
+						});
+					    $('#sela-list select').html(html);
+					}
+				})
+			} else {
+                $('#sela-list').hide();
+                $('#sela-list select').html('<option value="0"></option>');
+			}
+		});
+
+        $('#locality_list').trigger('change');
 	});
 
 

@@ -172,6 +172,8 @@ class ControllerCommonPsr extends Controller {
             $data['error_injured'] = false;
         }
 
+        $data['token'] = $this->session->data['token'];
+
         if (isset($this->request->get['psr_id']) && ($this->request->server['REQUEST_METHOD'] != 'POST')) {
             $this->load->model('common/psr');
             $psr_info = $this->model_common_psr->getPsr($this->request->get['psr_id']);
@@ -450,7 +452,6 @@ class ControllerCommonPsr extends Controller {
 
         if (utf8_strlen($this->request->post['description']) < 3) {
             $this->error['description'] = $this->language->get('error_description');
-            echo utf8_strlen($this->request->post['description']);
         }
 
         $have_spasatel = false;
@@ -496,6 +497,33 @@ class ControllerCommonPsr extends Controller {
 	    $result = $this->model_common_users->getUserPsp($this->user->getId());
 
 	    return $result;
+    }
+
+    public function getSeloByDistrict() {
+
+        $this->load->model('common/psr');
+
+	    if (!isset($this->request->get['district_id'])) {
+	        return false;
+        }
+
+        $sela = $this->model_common_psr->getSeloByDistrict($this->request->get['district_id']);
+
+	    if ($sela) {
+
+	        foreach ($sela as $selo) {
+                $result[] = array (
+                    'selo_id'   =>  $selo['selo_id'],
+                    'name'   =>  $selo['name']
+                );
+            }
+
+            $this->response->addHeader('Content-Type: application/json');
+            $this->response->setOutput(json_encode($result));
+
+        } else {
+	        return false;
+        }
     }
 
 }

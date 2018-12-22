@@ -1,7 +1,7 @@
 <?php echo $header; ?><?php echo $column_left; ?>
 <div id="content">
   <div class="page-header">
-    <div class="container-fluid">
+    <div id="center_main_block" class="container-fluid">
       <div class="pull-right">
         <button type="submit" form="form-order-status" data-toggle="tooltip" title="<?php echo $button_save; ?>" class="btn btn-primary"><i class="fa fa-save"></i></button>
         <a href="<?php echo $cancel; ?>" data-toggle="tooltip" title="<?php echo $button_cancel; ?>" class="btn btn-default"><i class="fa fa-reply"></i></a></div>
