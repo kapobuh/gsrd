@@ -92,7 +92,7 @@ class ModelCommonPsr extends Model {
                 'technic' => $technic,
                 'injured' => $injured,
                 'description' => $query->row['description'],
-                'type_name' => $type_name_query->row['name'],
+                'type_name' => ($type_name_query->row['name']) ? $type_name_query->row['name'] : '',
                 'locality_name' => $locality_name
 
 
