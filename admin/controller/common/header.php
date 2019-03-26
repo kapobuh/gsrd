@@ -9,6 +9,8 @@ class ControllerCommonHeader extends Controller {
 			$data['base'] = HTTP_SERVER;
 		}
 
+		$this->document->addStyle('view/stylesheet/main.css');
+
 		$data['description'] = $this->document->getDescription();
 		$data['keywords'] = $this->document->getKeywords();
 		$data['links'] = $this->document->getLinks();
@@ -50,8 +52,6 @@ class ControllerCommonHeader extends Controller {
 
 			$data['home'] = $this->url->link('common/dashboard', 'token=' . $this->session->data['token'], true);
 			$data['logout'] = $this->url->link('common/logout', 'token=' . $this->session->data['token'], true);
-
-			
 
 		}
 

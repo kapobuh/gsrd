@@ -28,22 +28,24 @@
 					<?php if ($psrs) { ?>
 
 						<tr>
-							<th style="width: 1px;" class="text-center"><input type="checkbox" onclick="$('input[name*=\'selected\']').prop('checked', this.checked);" /></th>
+							<!--th style="width: 1px;" class="text-center"><input type="checkbox" onclick="$('input[name*=\'selected\']').prop('checked', this.checked);" /></th-->
 							<th><?php echo $column_name; ?></th>
 							<th><?php echo $column_address; ?></th>
 							<th><?php echo $column_psp; ?></th>
 							<th><?php echo $column_date_added; ?></th>
+							<th></th>
 						</tr>
 
 						<?php foreach($psrs as $psr) { ?>
-						<tr alt="<?php echo $psr['psr_id']; ?>" class="psr_link psr-item">
-							<td class="text-center">
+						<tr class="psr-item">
+							<!--td class="text-center">
 								<input type="checkbox" name="selected[]" value="<?php echo $psr['psr_id']; ?>" />
-							</td>
-							<td><span><?php echo $psr['name']; ?></span></td>
+							</td-->
+							<td><span class="psr_link" alt="<?php echo $psr['psr_id']; ?>"><?php echo $psr['name']; ?></span></td>
 							<td><?php echo $psr['address']; ?></td>
 							<td><?php echo $psr['psp']; ?></td>
 							<td><?php echo $psr['date_added']; ?></td>
+							<td><a href="<?php echo $psr['edit']; ?>">Редактировать</a></td>
 						</tr>
 						<?php } ?>
 

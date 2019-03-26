@@ -41,6 +41,8 @@ class ControllerCommonSearch extends Controller {
         $data['incident_types'] = $this->getLists('incident_types');
         $data['psp_types'] = $this->getLists('psps');
         $data['locality_types'] = $this->getLists('localitys');
+        $data['equipments'] = $this->getLists('equipments');
+        $data['technics'] = $this->getLists('technics');
 
         if (isset($this->request->get['date_start'])) {
             $data['date_start'] = $this->session->data['date_start'];
@@ -296,7 +298,8 @@ class ControllerCommonSearch extends Controller {
                         'name'            =>  $this->language->get('psr_short_name'). $psr['psr_id'],
                         'address'         =>  $psr['city'] . ", " . $psr['street'] . ", " . $psr['house'],
                         'psp'             =>  $psr['psp_name'],
-                        'date_added'      =>  date("d.m.Y", strtotime($psr['date_added']))
+                        'date_added'      =>  date("d.m.Y", strtotime($psr['date_added'])),
+                        'edit'            =>  $this->url->link('common/psr/edit', 'psr_id=' . $psr['psr_id'] . '&token=' . $this->session->data['token'] ,  true)
                     );
                 }
             } else {
@@ -310,6 +313,9 @@ class ControllerCommonSearch extends Controller {
 
     }
 
+    /**
+     * Получаем информацию о ПСР
+     */
     public function getPsrInfo() {
         if (isset($this->request->get['psr_id'])) {
 
@@ -323,7 +329,7 @@ class ControllerCommonSearch extends Controller {
 
                 $data['locality'] = $psr_info['locality_name'];
                 $data['address'] = $psr_info['street'].', '.$psr_info['house'].', '.$psr_info['appartment'];
-                $data['date'] = $psr_info['date_start']. " - " . $psr_info['date_end'];
+                $data['date'] = $psr_info['date_start'] . " - " . $psr_info['date_end'];
 
                 $data['type'] = $psr_info['type_name'];
 
@@ -358,9 +364,13 @@ class ControllerCommonSearch extends Controller {
                 }
 
                 if ($psr_info['participant']) {
+
+                    $spasatels = 0;
+
                     foreach ($psr_info['participant'] as $participant) {
 
                         if ($participant['t'] == '1') {
+                            $spasatels = $participant['q'];
                             $temp_type = 'Спасателей: ';
                         } else {
                             $temp_type = 'Общественников: ';
@@ -372,6 +382,8 @@ class ControllerCommonSearch extends Controller {
                             'q'  =>  $participant['q']
                         );
                     }
+
+                    $data['PeopleHoursWorks'] = $this->getPeopleHoursWorks($psr_info['date_start'], $psr_info['date_end'], $spasatels);
                 }
                 //print_r($psr_info['injured']);
                 if (!empty($psr_info['injured'])) { // print_r($psr_info['injured']);
@@ -390,7 +402,7 @@ class ControllerCommonSearch extends Controller {
                         $data['injureds'][] = array (
                             'lastname'  => $injured['lastname'],
                             'firstname'  => $injured['firstname'],
-                            'birthday'  => date("d.m.Y",strtotime($injured['birthday'])),
+                            'birthday'  => date("Y",strtotime($injured['birthday'])),
                             'save_type' => $temp_type
                         );
                     }
@@ -407,6 +419,21 @@ class ControllerCommonSearch extends Controller {
             $this->response->setOutput($this->load->view('common/psr_info', $data));
 
         }
+    }
+
+
+    /**
+     * Возвращает значение человека/часов работы по формуле
+     * @param $date_start
+     * @param $date_end
+     * @param $spasatels
+     * @return float|int
+     */
+    public function getPeopleHoursWorks($date_start, $date_end, $spasatels) {
+        $d1 = strtotime($date_start);
+        $d2 = strtotime($date_end);
+        $diff = $d2 - $d1;
+        return (($diff/60) * $spasatels) / 8 / 60;
     }
 
 

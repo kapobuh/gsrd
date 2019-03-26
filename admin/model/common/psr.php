@@ -32,7 +32,7 @@ class ModelCommonPsr extends Model {
 
         if (!empty($data['injured'])) {
             foreach ($data['injured'] as $injured) {
-                $birthday = date("Y-m-d H:i:s",strtotime($injured['birthday']));
+                $birthday = date("Y",strtotime($injured['birthday']));
                 $this->db->query("INSERT INTO " . DB_PREFIX . "psr_injured SET psr_id = '". (int)$psr_id. "', injured_type_id = '" . (int)$injured['type'] . "', lastname = '" . $injured['lastname'] . "', firstname = '" . $injured['firstname'] . "', birthday = '" . $birthday . "'");
             }
         }

@@ -1,0 +1,107 @@
+
+
+.psr_link {
+	text-decoration: underline;
+	cursor: pointer;
+	color: #1d75b3;
+}
+
+
+#column-left {
+	background:#141c2d;
+}
+#menu > li > a {
+	color: #ffffff;
+	font-size: 13px;
+	padding-left: 13px;
+	border-bottom: 1px solid #4577922e;
+}
+#menu > li.active > a, #menu > li > a:hover {
+	color: #DDDDDD;
+	background: #045c8c;
+}
+#menu > li > ul {
+	background:#141c2d;
+}
+#menu li li a {
+	color:#b6e6ff;
+	font-size: 13px;
+}
+#menu > li > ul > li > a:hover {
+	color: #DDDDDD;
+	background: #045c8c;
+}
+#menu li a {
+
+	border-bottom: 1px solid #173342;
+}
+
+.form-control {
+	height: 30px;
+	padding: 0 10px;
+}
+.control-label {
+	margin-top:-3px;
+}
+#add_line_participant, #add_line_technic, #add_line_injured {
+	cursor:pointer;
+	display: block;
+	padding-left:9px;
+}
+.delete_element {
+	background: none;
+	border: none;
+	text-align: left;
+	vertical-align: middle;
+	margin-top: 3px;
+	cursor: pointer;
+}
+#participants_block {
+	padding-bottom:0;
+}
+#psr_description {
+	padding: 10px 15px;
+	height: 170px;
+}
+.btn-success {
+	color: #fff;
+	background-color: #60c763;
+	border-color: #60c763;
+}
+#participant_error, #injured_error, #technic_error {
+	margin-bottom: 15px;
+}
+@media(min-width: 450px) {
+	.w14 {
+		width: 14% !important;
+	}
+	.w3 {
+		width: 2%;
+		padding: 0;
+	}
+}
+
+#main_title span {
+	font-size: 20px;
+	font-family: RobotoSlab;
+}
+
+#technics_block, #injureds_block  {
+	padding-left:15px;
+	padding-right:15px;
+}
+
+.text_empty {
+	color:red;
+	font-size: 16px;
+	display: none;
+}
+@media(min-width: 768px) {
+	.table-responsive {
+		overflow-x: hidden;
+	}
+}
+
+#sela-list {
+	display: none;
+}

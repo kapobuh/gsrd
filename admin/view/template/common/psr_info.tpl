@@ -1,4 +1,10 @@
-<p><b>Населенный пункт:</b> <?php echo $locality; ?></p>
+<h3><?php echo $locality; ?>, <?php echo $address; ?></h3>
+
+<p><b>Период проведения работ: </b> <?php echo $date; ?></p>
+<?php if (isset($PeopleHoursWorks)) { ?>
+<p><b>Ч.ЧВСОВ:</b> <?php  echo $PeopleHoursWorks; ?></p>
+<?php } ?>
+<hr/>
 <p><b>Вид ЧС:</b> <?php echo $type; ?></p>
 
 <p><b>Привлеченная техника:</b></p>
@@ -28,7 +34,7 @@
 <h4><b>Пострадавшие</b></h4>
 <ul>
     <?php foreach ($injureds as $i) { ?>
-    <li><?php echo $i['save_type']. ' ' . $i['lastname']. ' ' .$i['firstname'] . " (" . $i['birthday'] . ")"; ?></li>
+    <li><?php echo $i['save_type']. ' ' . $i['lastname']. ' ' .$i['firstname'] . " (" . $i['birthday'] . " г. р.)"; ?></li>
     <?php } ?>
 </ul>
 <?php } else { ?>
@@ -41,7 +47,7 @@
 </div>
 
 <script>
-    $(document).ready(function(){
+    $(document).ready(function () {
         $('#psr_info_modal .modal-content .modal-header h3').html('<?php echo $heading_title; ?>');
     });
 </script>

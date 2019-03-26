@@ -40,24 +40,6 @@
 				</div>
 				<br/>
 				<div class="row">
-					<div class="col-sm-4">
-						<legend><?php echo $text_type; ?></legend>
-						<div class="well well-sm" style="height: 150px; overflow: auto;">
-							<?php foreach ($incident_types as $incident_type) { ?>
-							<div class="checkbox">
-								<label>
-									<?php if (in_array($incident_type['incidenttype_id'], $incidents)) { ?>
-									<input type="checkbox" name="incidents[]" value="<?php echo $incident_type['incidenttype_id']; ?>" checked />
-									<?php } else { ?>
-									<input type="checkbox" name="incident[]" value="<?php echo $incident_type['incidenttype_id']; ?>" />
-									<?php } ?>
-									<?php echo $incident_type['name']; ?>
-								</label>
-
-							</div>
-							<?php } ?>
-						</div>
-					</div>
 
 					<div class="col-sm-4">
 						<legend><?php echo $text_locality; ?></legend>
@@ -96,6 +78,65 @@
 							<?php } ?>
 						</div>
 					</div>
+
+					<div class="col-sm-4">
+						<legend><?php echo $text_type; ?></legend>
+						<div class="well well-sm" style="height: 150px; overflow: auto;">
+							<?php foreach ($incident_types as $incident_type) { ?>
+							<div class="checkbox">
+								<label>
+									<?php if (in_array($incident_type['incidenttype_id'], $incidents)) { ?>
+									<input type="checkbox" name="incidents[]" value="<?php echo $incident_type['incidenttype_id']; ?>" checked />
+									<?php } else { ?>
+									<input type="checkbox" name="incident[]" value="<?php echo $incident_type['incidenttype_id']; ?>" />
+									<?php } ?>
+									<?php echo $incident_type['name']; ?>
+								</label>
+
+							</div>
+							<?php } ?>
+						</div>
+					</div>
+
+
+
+					<!--div class="col-sm-3">
+						<legend>Оборудование</legend>
+						<div class="well well-sm" style="height: 150px; overflow: auto;">
+							<?php foreach ($equipments as $equipment) { ?>
+							<div class="checkbox">
+								<label>
+									<?php if (in_array($equipment['equipment_id'], $equipments)) { ?>
+									<input type="checkbox" name="equipments[]" value="<?php echo $equipment['equipment_id']; ?>" checked />
+									<?php } else { ?>
+									<input type="checkbox" name="equipments[]" value="<?php echo $equipment['equipment_id']; ?>" />
+									<?php } ?>
+									<?php echo $equipment['name']; ?>
+								</label>
+
+							</div>
+							<?php } ?>
+						</div>
+					</div>
+
+					<div-- class="col-sm-2">
+						<legend>Используемая техника</legend>
+						<div class="well well-sm" style="height: 150px; overflow: auto;">
+							<?php foreach ($technics as $technic) { ?>
+							<div class="checkbox">
+								<label>
+									<?php if (in_array($technic['technic_type_id'], $technics)) { ?>
+									<input type="checkbox" name="technics[]" value="<?php echo $technic['technic_type_id']; ?>" checked />
+									<?php } else { ?>
+									<input type="checkbox" name="technics[]" value="<?php echo $technic['technic_type_id']; ?>" />
+									<?php } ?>
+									<?php echo $technic['name']; ?>
+								</label>
+
+							</div>
+							<?php } ?>
+						</div>
+					</div-->
 
 				</div>
 

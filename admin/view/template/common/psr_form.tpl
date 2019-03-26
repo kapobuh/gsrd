@@ -290,7 +290,7 @@
 							<div class="col-xs-12 visible-xs"><br/></div>
 
 							<div class="col-sm-2 w14">
-								<input data-date-format="dd.mm.yyyy" data-timepicker="false" autocomplete="off" type="text"  class="form-control datepicker-here" value="<?php echo $injured['birthday']; ?>" name="injured[<?php echo $injured_row; ?>][birthday]" placeholder="<?php echo $text_birthday;?>"/>
+								<input data-date-format="yyyy" data-view="years" data-min-view="years" data-timepicker="false" autocomplete="off" type="text"  class="form-control datepicker-here" value="<?php echo $injured['birthday']; ?>" name="injured[<?php echo $injured_row; ?>][birthday]" placeholder="<?php echo $text_birthday;?>"/>
 							</div>
 							<div class="col-xs-12 visible-xs"><br/></div>
 
@@ -406,12 +406,17 @@
 
             technic_row++;
         }
+
+        // Скрываем уже выбранные варианты
+        $('#technic-list').each(function(indx, el) {
+
+        });
     });
 
     var injured_row = <?php echo $injured_row; ?>;
 
     $('#add_line_injured').click(function(){
-        html = '<div class="form-group" style="border-top: none;padding-top: 0px;" id="injured_block_'+ injured_row +'"><label class="col-sm-3 control-label text-right" for="input-type"></label><div class="col-sm-2"><input class="form-control" value="" name="injured['+ injured_row +'][lastname]" placeholder="<?php echo $text_lastname;?>" /></div><div class="col-xs-12 visible-xs"><br/></div><div class="col-sm-3"><input class="form-control" value="" name="injured['+ injured_row +'][firstname]" placeholder="<?php echo $text_firstname;?>"/></div><div class="col-xs-12 visible-xs"><br/></div><div class="col-sm-2 w14"><input id="birthday_dtp_' + injured_row +'" data-date-format="dd.mm.yyyy" data-timepicker="false" autocomplete="off" type="text"  class="form-control datepicker-here" value="" name="injured['+ injured_row +'][birthday]" placeholder="<?php echo $text_birthday;?>"/></div><div class="col-xs-12 visible-xs"><br/></div><div class="col-sm-2 w14"><select name="injured[<?php echo $injured_row; ?>][type]" class="form-control"><?php if ($injured_types) { ?><?php foreach ($injured_types as $injured_type) { ?><option value="<?php echo $injured_type['injured_type_id']; ?>"><?php echo $injured_type['name'];?></option><?php } ?><?php } ?></select></div><div class="col-sm-1 w3"><button onclick="$(\'#injured_block_' + injured_row  + '\').remove();" data-toggle="tooltip" class="delete_element" type="button"><i class="fa fa-minus-circle"></i></button></div></div>';
+        html = '<div class="form-group" style="border-top: none;padding-top: 0px;" id="injured_block_'+ injured_row +'"><label class="col-sm-3 control-label text-right" for="input-type"></label><div class="col-sm-2"><input class="form-control" value="" name="injured['+ injured_row +'][lastname]" placeholder="<?php echo $text_lastname;?>" /></div><div class="col-xs-12 visible-xs"><br/></div><div class="col-sm-3"><input class="form-control" value="" name="injured['+ injured_row +'][firstname]" placeholder="<?php echo $text_firstname;?>"/></div><div class="col-xs-12 visible-xs"><br/></div><div class="col-sm-2 w14"><input id="birthday_dtp_' + injured_row +'" data-date-format="dd.mm.yyyy" data-timepicker="false" data-view="years" data-min-view="years" autocomplete="off" type="text"  class="form-control datepicker-here" value="" name="injured['+ injured_row +'][birthday]" placeholder="<?php echo $text_birthday;?>"/></div><div class="col-xs-12 visible-xs"><br/></div><div class="col-sm-2 w14"><select name="injured[<?php echo $injured_row; ?>][type]" class="form-control"><?php if ($injured_types) { ?><?php foreach ($injured_types as $injured_type) { ?><option value="<?php echo $injured_type['injured_type_id']; ?>"><?php echo $injured_type['name'];?></option><?php } ?><?php } ?></select></div><div class="col-sm-1 w3"><button onclick="$(\'#injured_block_' + injured_row  + '\').remove();" data-toggle="tooltip" class="delete_element" type="button"><i class="fa fa-minus-circle"></i></button></div></div>';
 
         $('#injureds_block').append(html);
         $('#injured_error').remove();
@@ -421,6 +426,8 @@
         console.log($('#birthday_dtp_' + injured_row));
 
         injured_row++;
+
+
     });
 
     if ($('#none_injured').prop('checked')) {
@@ -472,6 +479,17 @@
 		});
 
         $('#locality_list').trigger('change');
+
+        $(function () {
+            $('#date_select').datetimepicker({
+                defaultDate: new Date(),
+                viewMode: 'months',
+                format: 'MM.YYYY',
+                locale: 'ru'
+
+            });
+        });
+
 	});
 
 
