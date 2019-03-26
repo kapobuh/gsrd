@@ -45,7 +45,7 @@
 							<td><?php echo $psr['address']; ?></td>
 							<td><?php echo $psr['psp']; ?></td>
 							<td><?php echo $psr['date_added']; ?></td>
-							<td><a href="<?php echo $psr['edit']; ?>">Редактировать</a></td>
+							<td><a target="_blank" href="<?php echo $psr['edit']; ?>">Редактировать</a></td>
 						</tr>
 						<?php } ?>
 
