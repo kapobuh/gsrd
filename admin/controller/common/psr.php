@@ -2,14 +2,18 @@
 class ControllerCommonPsr extends Controller {
     private $error = array();
 
+    /**
+     * Возвращает главную страницу добавления ПСР
+     */
 	public function index() {
         $this->document->setTitle($this->language->get('heading_title'));
-
         $this->load->language('common/psr');
-
         $this->getForm();
     }
 
+    /**
+     * Добавить информацию о ПСР
+     */
     public function add() {
 
         $this->load->language('common/psr');
@@ -39,6 +43,10 @@ class ControllerCommonPsr extends Controller {
 
     }
 
+
+    /**
+     * Редактирование информации о ПСР
+     */
     public function edit() {
 
         $this->load->language('common/psr');
@@ -68,6 +76,10 @@ class ControllerCommonPsr extends Controller {
 
     }
 
+    /**
+     * Возвращает форму для заполнения информации о ПСР
+     * для сохранения/добавления
+     */
 	public function getForm() {
 
 	    $data = array();
@@ -523,6 +535,18 @@ class ControllerCommonPsr extends Controller {
 
         } else {
 	        return false;
+        }
+    }
+
+    /**
+     * Удаление ПСР по ее id
+     * @param $psr_id
+     * @return bool
+     */
+    public function deletePsr() {
+        $this->load->model('common/psr');
+        if (isset($this->request->get['psr_id'])) {
+            return $this->model_common_psr->deletePsr((int)$this->request->get['psr_id']);
         }
     }
 

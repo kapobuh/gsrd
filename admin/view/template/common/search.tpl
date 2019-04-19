@@ -98,46 +98,6 @@
 						</div>
 					</div>
 
-
-
-					<!--div class="col-sm-3">
-						<legend>Оборудование</legend>
-						<div class="well well-sm" style="height: 150px; overflow: auto;">
-							<?php foreach ($equipments as $equipment) { ?>
-							<div class="checkbox">
-								<label>
-									<?php if (in_array($equipment['equipment_id'], $equipments)) { ?>
-									<input type="checkbox" name="equipments[]" value="<?php echo $equipment['equipment_id']; ?>" checked />
-									<?php } else { ?>
-									<input type="checkbox" name="equipments[]" value="<?php echo $equipment['equipment_id']; ?>" />
-									<?php } ?>
-									<?php echo $equipment['name']; ?>
-								</label>
-
-							</div>
-							<?php } ?>
-						</div>
-					</div>
-
-					<div-- class="col-sm-2">
-						<legend>Используемая техника</legend>
-						<div class="well well-sm" style="height: 150px; overflow: auto;">
-							<?php foreach ($technics as $technic) { ?>
-							<div class="checkbox">
-								<label>
-									<?php if (in_array($technic['technic_type_id'], $technics)) { ?>
-									<input type="checkbox" name="technics[]" value="<?php echo $technic['technic_type_id']; ?>" checked />
-									<?php } else { ?>
-									<input type="checkbox" name="technics[]" value="<?php echo $technic['technic_type_id']; ?>" />
-									<?php } ?>
-									<?php echo $technic['name']; ?>
-								</label>
-
-							</div>
-							<?php } ?>
-						</div>
-					</div-->
-
 				</div>
 
 				<div id="results" class="row">
@@ -155,19 +115,7 @@
 <div id="psr_info_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="added_message" aria-hidden="true">
 	<div class="modal-dialog  modal-lg">
 		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-				<h3 class="modal-title" id="myModalLabel"></h3>
-			</div>
-			<div class="modal-body">
-				...
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть окно</button>
-				<!--a href="/cart" type="button" class="btn btn-success"></a-->
-			</div>
+
 		</div>
 	</div>
 </div>
@@ -191,7 +139,11 @@
                     }
 				})
 			}
-		})
+		});
+
+		$('#delete-psr-btn').click(function() {
+
+		});
     })
 </script>
 <?php echo $footer; ?>

@@ -2,8 +2,11 @@
 class ControllerCommonSearch extends Controller {
     public $injured_array = array('1' => 'Спасено', '2' => 'Погибло');
 
-    public function index() {
 
+    /**
+     * Главная страница поиска информации о ПСР
+     */
+    public function index() {
         $this->load->model('common/psr');
         $this->load->language('common/search');
 
@@ -91,6 +94,8 @@ class ControllerCommonSearch extends Controller {
         $this->response->setOutput($this->load->view('common/search', $data));
 
     }
+
+
 
     public function getLists($type) {
         $this->load->model('common/lists');
@@ -211,9 +216,14 @@ class ControllerCommonSearch extends Controller {
         return $result_data;
 
     }
-    
-    public function getResults () {
 
+
+    /**
+     * Возвращает список ПСР
+     * по заданным критериям поиска
+     */
+    public function getResults()
+    {
 
         if (isset($this->request->post['date_start'])) {
             $this->session->data['date_start'] = $this->request->post['date_start'];
@@ -231,87 +241,68 @@ class ControllerCommonSearch extends Controller {
             $this->session->data['localitys'] = $this->request->post['locality'];
         }
 
-        if ($this->request->server['REQUEST_METHOD'] == 'POST') {
-
-            $date_start = date("Y-m-d", strtotime($this->request->post['date_start']));
-            $date_end = date("Y-m-d", strtotime($this->request->post['date_end']));
-
-            if (isset($this->request->post['incident'])) {
-                $incidents = implode(",", $this->request->post['incident']);
-            } else {
-                $incidents = false;
-            }
-
-            if (isset($this->request->post['locality'])) {
-                $localitys = implode(",", $this->request->post['locality']);
-            } else {
-                $localitys = false;
-            }
-
-            if (isset($this->request->post['psps'])) {
-                $psps = implode(",", $this->request->post['psps']);
-            } else {
-                $psps = false;
-            }
-
-            $filter_data = array (
-                'date_start' => $date_start,
-                'date_end'   => $date_end,
-                'incidents'  => $incidents,
-                'localitys'  => $localitys,
-                'psps'       => $psps
-            );
-
-            $data['token'] = $this->session->data['token'];
-
-            $this->load->model('common/psr');
-            $this->load->language('common/inbox');
-
-            $data['heading_title'] = $this->language->get('heading_title');
-            $data['text_inbox_list_search'] = $this->language->get('text_inbox_list_search');
-            $data['text_empty2'] = $this->language->get('text_empty2');
-            $data['column_name'] = $this->language->get('column_name');
-            $data['column_address'] = $this->language->get('column_address');
-            $data['column_psp'] = $this->language->get('column_psp');
-            $data['column_date_added'] = $this->language->get('column_date_added');
-
-            $results = $this->model_common_psr->getPsrs($filter_data, 1);
-
-            if ($results) {
-
-                $injured_totals = $this->model_common_psr->getInjuredsTotal('injured_totals', $filter_data);
-
-                if ($injured_totals) {
-                    foreach ($injured_totals as $injured_total) {
-                        $data['injured_totals'][] = array (
-                            'name'      =>  $this->injured_array[$injured_total['injured_type_id']],
-                            'quantity'  =>  $injured_total['quantity']
-                        );
-                    }
-                } else {
-                    $data['injured_totals'] = false;
-                }
-
-                foreach ($results as $psr) {
-                    $data['psrs'][] = array (
-                        'psr_id'          =>  $psr['psr_id'],
-                        'name'            =>  $this->language->get('psr_short_name'). $psr['psr_id'],
-                        'address'         =>  $psr['city'] . ", " . $psr['street'] . ", " . $psr['house'],
-                        'psp'             =>  $psr['psp_name'],
-                        'date_added'      =>  date("d.m.Y", strtotime($psr['date_added'])),
-                        'edit'            =>  $this->url->link('common/psr/edit', 'psr_id=' . $psr['psr_id'] . '&token=' . $this->session->data['token'] ,  true)
-                    );
-                }
-            } else {
-                $data['psrs'] = false;
-                $data['injured_totals'] = false;
-            }
-
-            $this->response->setOutput($this->load->view('common/search_results', $data));
-
+        if (isset($this->request->post['incident'])) {
+            $incidents = implode(",", $this->request->post['incident']);
+        } else {
+            $incidents = false;
         }
 
+        if (isset($this->request->post['locality'])) {
+            $localitys = implode(",", $this->request->post['locality']);
+        } else {
+            $localitys = false;
+        }
+
+        if (isset($this->request->post['psps'])) {
+            $psps = implode(",", $this->request->post['psps']);
+        } else {
+            $psps = false;
+        }
+
+        $date_start = date("Y-m-d", strtotime($this->request->post['date_start']));
+        $date_end = date("Y-m-d", strtotime($this->request->post['date_end']));
+
+        $filter_data = array(
+            'date_start' => $date_start,
+            'date_end' => $date_end,
+            'incidents' => $incidents,
+            'localitys' => $localitys,
+            'psps' => $psps
+        );
+
+        $data['token'] = $this->session->data['token'];
+
+        $this->load->model('common/psr');
+        $this->load->language('common/inbox');
+
+        $data['heading_title'] = $this->language->get('heading_title');
+        $data['text_inbox_list_search'] = $this->language->get('text_inbox_list_search');
+        $data['text_empty2'] = $this->language->get('text_empty2');
+        $data['column_name'] = $this->language->get('column_name');
+        $data['column_address'] = $this->language->get('column_address');
+        $data['column_psp'] = $this->language->get('column_psp');
+        $data['column_date_added'] = $this->language->get('column_date_added');
+
+        $results = $this->model_common_psr->getPsrs($filter_data, 1);
+
+        if ($results) {
+            foreach ($results as $psr) {
+                $data['psrs'][] = array(
+                    'psr_id' => $psr['psr_id'],
+                    'name' => $this->language->get('psr_short_name') . $psr['psr_id'],
+                    'address' => $psr['city'] . ", " . $psr['street'] . ", " . $psr['house'],
+                    'psp' => $psr['psp_name'],
+                    'date_added' => date("d.m.Y", strtotime($psr['date_added'])),
+                    'edit' => $this->url->link('common/psr/edit', 'psr_id=' . $psr['psr_id'] . '&token=' . $this->session->data['token'], true)
+                );
+            }
+        } else {
+            $data['psrs'] = false;
+        }
+
+        $this->response->setOutput($this->load->view('common/search_results', $data));
     }
+
 
     /**
      * Получаем информацию о ПСР
@@ -416,6 +407,8 @@ class ControllerCommonSearch extends Controller {
 
             }
 
+            $data['token'] = $this->session->data['token'];
+
             $this->response->setOutput($this->load->view('common/psr_info', $data));
 
         }
@@ -435,10 +428,4 @@ class ControllerCommonSearch extends Controller {
         $diff = $d2 - $d1;
         return (($diff/60) * $spasatels) / 8 / 60;
     }
-
-
-
-
-
-
 }

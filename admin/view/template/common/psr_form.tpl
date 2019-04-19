@@ -213,7 +213,7 @@
 								<select id="technic-list" name="technic[<?php echo $technic_row; ?>][technic_id]" class="form-control">
 									<?php if ($technic_types) { ?>
 										<?php foreach ($technic_types as $technic_type) { ?>
-											<?php if ($technic_type['technic_type_id'] == $technic['technic_id']) { ?>
+											<?php if ($technic_type['technic_type_id'] == $technic['type_id']) { ?>
 
 												<option value="<?php echo $technic_type['technic_type_id']; ?>" selected
 												><?php echo $technic_type['name'];?></option>
@@ -492,6 +492,13 @@
 
 	});
 
+
+
+    function hideSelectedElem(elem) {
+		elem.each(function (indx, el) {
+			alert(el);
+        })
+	}
 
 
 </script>
