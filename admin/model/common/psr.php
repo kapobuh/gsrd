@@ -26,7 +26,7 @@ class ModelCommonPsr extends Model {
 	                        date_end = '". $date_end ."', 
 	                        description = '" . $this->db->escape($data['description']) . "', 
 	                        moderated = '".(int)$data['moderated']."',
-	                        status = '" . ACTIVE_STATUS_PSR . "'
+	                        status = '" . ACTIVE_STATUS_PSR . "',
 	                        date_added = NOW()");
 
 	    $psr_id = $this->db->getLastId();
@@ -142,10 +142,11 @@ class ModelCommonPsr extends Model {
     /**
      * Получает список ПСР
      * @param $filter_data
+     * @param $limits - false для суммарных данных
      * @param int $moderated
      * @return mixed
      */
-    public function getPsrs($filter_data , $moderated = 1) {
+    public function getPsrs($filter_data , $moderated = 1, $limits = true) {
 
 	    $sql = "SELECT psr.psr_id, l.name as city, a.street, a.house, a.appartment, psp.name as psp_name, psr.date_added
                 FROM " . DB_PREFIX . "psr psr
@@ -248,19 +249,6 @@ class ModelCommonPsr extends Model {
 	}
 
     /**
-     * Возвращает Село по id района
-     * @param $district_id
-     * @return mixed
-     */
-    public function getSeloByDistrict($district_id) {
-	    $query = $this->db->query("SELECT `name`, locality_id as `selo_id` 
-                                   FROM " . DB_PREFIX . "locality
-                                   WHERE parent_id = '".(int)$district_id."' 
-                                   AND `type` = '" . SELO_LOCALITY_TYPE . "'");
-	    return($query->rows);
-    }
-
-    /**
      * Возвращает id адреса поисково-спасательной работы
      * @param $psr_id
      * @return int
@@ -273,64 +261,31 @@ class ModelCommonPsr extends Model {
     /**
      * Помечает ПСР как удаленный
      * @param $psr_id
+     * @return bool
      */
     public function deletePsr($psr_id) {
-	    $this->db->query("UPDATE " . DB_PREFIX . "psr SET `status` = " . DELETED_STATUS_PSR . " WHERE psr_id = '".(int)$psr_id."'");
+	    $query = $this->db->query("UPDATE " . DB_PREFIX . "psr 
+	                               SET `status` = " . DELETED_STATUS_PSR . " 
+	                               WHERE psr_id = '".(int)$psr_id."'");
+	    return ($query) ? true : false;
     }
 
     /**
-     *
-     * @param $totals_type
-     * @param $filter_data
+     * Возвращает суммарные данные по пострадавшим в ПСР
+     * @param $psr_ids - список пср для поиска
      * @return mixed
      */
-    public function getInjuredsTotal($totals_type, $filter_data) {
+    public function getInjuredTotals($psr_ids) {
 
-        $filters ="";
-
-        if (!empty($filter_data['incidents'])) {
-            $filters.= " AND psr.type_id IN (" . $this->db->escape($filter_data['incidents']) . ")";
-        }
-
-        if (!empty($filter_data['localitys'])) {
-            $filters.= " AND a.locality_id IN (" . $this->db->escape($filter_data['localitys']) . ")";
-        }
-
-        if (!empty($filter_data['psps'])) {
-            $filters.= " AND psr.psp_id IN (" . $this->db->escape($filter_data['psps']) . ")";
-        }
-
-        if (!empty($filter_data['date_start'])) {
-            $filters.= " AND date_start BETWEEN '".$this->db->escape($filter_data['date_start'])."' AND '".$this->db->escape($filter_data['date_end'])."'";
-        }
-
-        switch ($totals_type) {
-            case "injured_totals":
-                $sql = "SELECT inj.injured_type_id, COUNT(inj.injured_type_id) as quantity
-                        FROM nfo_psr psr JOIN nfo_psr_injured inj ON psr.psr_id = inj.psr_id 
-                            LEFT JOIN nfo_address a ON a.address_id = psr.address_id
-                            JOIN nfo_locality l ON a.locality_id = l.locality_id
-                        WHERE psr.moderated = '1' " . $filters . "
-                        GROUP BY inj.injured_type_id";
-                break;
-
-            case "technic_totals":
-                $sql = "SELECT t.technic_id, SUM(t.quantity)
-                        FROM nfo_psr psr JOIN nfo_psr_technics t ON psr.psr_id = t.psr_id
-                        WHERE psr.moderated = '1' " . $filters . "
-                        GROUP BY t.technic_id";
-                break;
-
-            case "psp_totals":
-                $sql = "SELECT distinct (psr.psp_id)
-                        FROM nfo_psr psr
-                        WHERE psr.moderated = '1'" . $filters;
-                break;
-        }
+        $sql = "SELECT i.injured_type_id, p.type_id, COUNT(i.psr_injured_id) as quantity
+                 FROM " . DB_PREFIX . "psr_injured i
+                 LEFT JOIN " . DB_PREFIX . "psr p ON i.psr_id = p.psr_id
+                WHERE p.psr_id IN (" . implode(",",$psr_ids) . ")
+                GROUP BY p.type_id";
 
         $query = $this->db->query($sql);
 
-        return $query->rows;
+        return ($query->num_rows) ? $query->rows : null;
     }
 
 }

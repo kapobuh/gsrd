@@ -2,6 +2,15 @@
 class ControllerCommonSearch extends Controller {
     public $injured_array = array('1' => 'Спасено', '2' => 'Погибло');
 
+    /**
+     * Типы пострадавших для вывода
+     * @var array
+     */
+    public $types_injured_in_incident = array (
+        '1' => 'На воде',
+        '3' => 'На бытовой основе',
+        '4' => 'При пожаре'
+    );
 
     /**
      * Главная страница поиска информации о ПСР
@@ -41,11 +50,12 @@ class ControllerCommonSearch extends Controller {
             $data['success'] = '';
         }
 
-        $data['incident_types'] = $this->getLists('incident_types');
-        $data['psp_types'] = $this->getLists('psps');
-        $data['locality_types'] = $this->getLists('localitys');
-        $data['equipments'] = $this->getLists('equipments');
-        $data['technics'] = $this->getLists('technics');
+        $this->load->model('common/lists');
+        $data['incident_types'] = $this->model_common_lists->getLists('incident_types');
+        $data['psp_types'] = $this->model_common_lists->getLists('psps');
+        $data['locality_types'] = $this->model_common_lists->getLists('localitys');
+        $data['equipments'] = $this->model_common_lists->getLists('equipments');
+        $data['technics'] = $this->model_common_lists->getLists('technics');
 
         if (isset($this->request->get['date_start'])) {
             $data['date_start'] = $this->session->data['date_start'];
@@ -53,7 +63,7 @@ class ControllerCommonSearch extends Controller {
             $today = strtotime('-1 month');
             $date_start = date("d.m.Y", $today);
             $data['date_start'] = $date_start;
-        }
+        } $data['date_start'] = '01.01.2000';
 
         if (isset($this->session->data['date_end'])) {
             $data['date_end'] = $this->session->data['date_end'];
@@ -81,7 +91,6 @@ class ControllerCommonSearch extends Controller {
             $data['psps'] = array();
         }
 
-        //$data['ajax_action'] = $this->url->link('common/search/getResults', 'token=' . $this->session->data['token']);
         $data['token'] = $this->session->data['token'];
 
         $this->document->addStyle('view/javascript/airdatetimepicker/css/datepicker.min.css');
@@ -92,128 +101,6 @@ class ControllerCommonSearch extends Controller {
         $data['footer'] = $this->load->controller('common/footer');
 
         $this->response->setOutput($this->load->view('common/search', $data));
-
-    }
-
-
-
-    public function getLists($type) {
-        $this->load->model('common/lists');
-
-        $result_data = array();
-
-        switch ($type) {
-
-            case "psps":
-                //Виды ЧС
-                $psps = $this->model_common_lists->getPsps();
-                if ($psps) {
-                    foreach ($psps as $psp) {
-                        $result_data[] = array (
-                            'psp_id' => $psp['psp_id'],
-                            'name'       => $psp['name']
-                        );
-                    }
-                } else {
-                    $result_data = false;
-                }
-                break;
-
-            case "incident_types":
-                //Виды ЧС
-                $incident_types = $this->model_common_lists->getIncidentTypes();
-                if ($incident_types) {
-                    foreach ($incident_types as $incident_type) {
-                        $result_data[] = array (
-                            'incidenttype_id' => $incident_type['incidenttype_id'],
-                            'name'       => $incident_type['name']
-                        );
-                    }
-                } else {
-                    $result_data = false;
-                }
-                break;
-
-            case "localitys":
-                //Города и районы
-                $localitys = $this->model_common_lists->getLocalitys();
-                if ($localitys) {
-                    foreach ($localitys as $locality) {
-                        $result_data[] = array (
-                            'locality_id' => $locality['locality_id'],
-                            'name'       =>  $locality['name'],
-                            'type'       =>  $locality['type'],
-                        );
-                    }
-                } else {
-                    $result_data = false;
-                }
-                break;
-
-            case "equipments":
-                //Оборудование
-                $equipments = $this->model_common_lists->getEquipments();
-                if ($equipments) {
-                    foreach ($equipments as $equipment) {
-                        $result_data[] = array (
-                            'equipment_id' => $equipment['equipment_id'],
-                            'name'       =>  $equipment['name']
-                        );
-                    }
-                } else {
-                    $result_data = false;
-                }
-                break;
-
-            case "technics":
-                //Техника
-                $technics = $this->model_common_lists->getTechnics();
-                if ($technics) {
-                    foreach ($technics as $technic) {
-                        $result_data[] = array (
-                            'technic_type_id' => $technic['technic_id'],
-                            'name'       =>  $technic['name']
-                        );
-                    }
-                } else {
-                    $result_data = false;
-                }
-                break;
-
-            case "injureds":
-                //Типы спасения
-                $injureds = $this->model_common_lists->getInjureds();
-                if ($injureds) {
-                    foreach ($injureds as $injured) {
-                        $result_data[] = array (
-                            'injured_type_id' => $injured['injured_id'],
-                            'name'       =>  $injured['name']
-                        );
-                    }
-                } else {
-                    $result_data = false;
-                }
-                break;
-
-            case "participants":
-                //Типы участника ПСР
-                $participants = $this->model_common_lists->getParticipants();
-                if ($participants) {
-                    foreach ($participants as $participant) {
-                        $result_data[] = array (
-                            'participant_type_id' => $participant['participant_id'],
-                            'name'       =>  $participant['name']
-                        );
-                    }
-                } else {
-                    $result_data = false;
-                }
-                break;
-
-            default: $result_data = false;
-        }
-
-        return $result_data;
 
     }
 
@@ -286,6 +173,9 @@ class ControllerCommonSearch extends Controller {
         $results = $this->model_common_psr->getPsrs($filter_data, 1);
 
         if ($results) {
+
+            $data['psrs_count'] = count($results);
+
             foreach ($results as $psr) {
                 $data['psrs'][] = array(
                     'psr_id' => $psr['psr_id'],
@@ -296,8 +186,33 @@ class ControllerCommonSearch extends Controller {
                     'edit' => $this->url->link('common/psr/edit', 'psr_id=' . $psr['psr_id'] . '&token=' . $this->session->data['token'], true)
                 );
             }
+
+            // Получаем суммарные данные по результирующему списку
+            $all_results = $this->model_common_psr->getPsrs($filter_data, 1, false);
+
+            foreach ($all_results as $result) {
+                $psr_ids[] = $result['psr_id'];
+            }
+
+            // Пострадавшие
+            $injured_totals = $this->model_common_psr->getInjuredTotals($psr_ids);
+            if ($injured_totals) {
+                $data['count_injureds'] = 0;
+                foreach ($injured_totals as $injured_total) {
+                    $data['injured_totals'][] = array(
+                        'type' => $this->types_injured_in_incident[$injured_total['type_id']],
+                        'quantity' => $injured_total['quantity']
+                    );
+                    $data['count_injureds'] += $injured_total['quantity'];
+                }
+            } else {
+                $data['injured_totals'] = false;
+            }
+
+
         } else {
-            $data['psrs'] = false;
+            $data['psrs'] = $data['count_injureds'] = $data['injured_totals'] = $data['psrs_count'] = false;
+
         }
 
         $this->response->setOutput($this->load->view('common/search_results', $data));
@@ -317,15 +232,14 @@ class ControllerCommonSearch extends Controller {
             if ($psr_info) {
 
                 $data['heading_title'] = 'Поисково спасательная работа №' . $psr_info['psr_id'];
-
                 $data['locality'] = $psr_info['locality_name'];
                 $data['address'] = $psr_info['street'].', '.$psr_info['house'].', '.$psr_info['appartment'];
                 $data['date'] = $psr_info['date_start'] . " - " . $psr_info['date_end'];
-
+                $this->load->model('common/lists');
                 $data['type'] = $psr_info['type_name'];
 
                 if ($psr_info['technic']) {
-                    $technics_list = $this->getLists('technics');
+                    $technics_list = $this->model_common_lists->getLists('technics');
                     foreach ($technics_list as $technic_list) {
                         foreach ($psr_info['technic'] as $technic_id) {
                             if ($technic_id['technic_id'] == $technic_list['technic_type_id']) {
@@ -339,7 +253,7 @@ class ControllerCommonSearch extends Controller {
                 }
 
                 if ($psr_info['equipments']) {
-                    $equipments_list = $this->getLists('equipments');
+                    $equipments_list = $this->model_common_lists->getLists('equipments');
                     foreach ($equipments_list as $equipment_list) {
                         foreach ($psr_info['equipments'] as $equipment) {
                             if ($equipment == $equipment_list['equipment_id']) {
@@ -374,7 +288,8 @@ class ControllerCommonSearch extends Controller {
                         );
                     }
 
-                    $data['PeopleHoursWorks'] = $this->getPeopleHoursWorks($psr_info['date_start'], $psr_info['date_end'], $spasatels);
+                    $this->load->model('common/helpers');
+                    $data['PeopleHoursWorks'] = $this->model_common_helpers->getPeopleHoursWorks($psr_info['date_start'], $psr_info['date_end'], $spasatels);
                 }
                 //print_r($psr_info['injured']);
                 if (!empty($psr_info['injured'])) { // print_r($psr_info['injured']);
@@ -401,31 +316,13 @@ class ControllerCommonSearch extends Controller {
                     $data['injureds'] = false;
                 }
 
-
                 $data['description'] = html_entity_decode($psr_info['description'], ENT_QUOTES, 'UTF-8');
-
-
             }
 
-            $data['token'] = $this->session->data['token'];
-
+            $data['psr_id'] = $this->request->get['psr_id'];
             $this->response->setOutput($this->load->view('common/psr_info', $data));
 
         }
     }
 
-
-    /**
-     * Возвращает значение человека/часов работы по формуле
-     * @param $date_start
-     * @param $date_end
-     * @param $spasatels
-     * @return float|int
-     */
-    public function getPeopleHoursWorks($date_start, $date_end, $spasatels) {
-        $d1 = strtotime($date_start);
-        $d2 = strtotime($date_end);
-        $diff = $d2 - $d1;
-        return (($diff/60) * $spasatels) / 8 / 60;
-    }
 }

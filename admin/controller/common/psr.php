@@ -73,7 +73,18 @@ class ControllerCommonPsr extends Controller {
             $this->getForm();
         }
 
+    }
 
+    /**
+     * Удаление ПСР по ее id
+     * @param $psr_id
+     * @return bool
+     */
+    public function delete() {
+        $this->load->model('common/psr');
+        if (isset($this->request->get['psr_id'])) {
+            return $this->model_common_psr->deletePsr((int)$this->request->get['psr_id']);
+        }
     }
 
     /**
@@ -113,19 +124,19 @@ class ControllerCommonPsr extends Controller {
             $data['action'] = $this->url->link('common/psr/edit/', 'token=' . $this->session->data['token'] . '&psr_id=' .$this->request->get['psr_id'], true);
         }
 
-        $this->load->controller('common/functions');
-
-        $data['incident_types'] = $this->getLists('incident_types');
-        $data['localitys'] = $this->getLists('localitys');
-        $data['equipment_types'] = $this->getLists('equipments');
-        $data['technic_types'] = $this->getLists('technics');
-        $data['injured_types'] = $this->getLists('injureds');
-        $data['participant_types'] = $this->getLists('participants');
+        $this->load->model('common/lists');
+        $data['incident_types'] = $this->model_common_lists->getLists('incident_types');
+        $data['localitys'] = $this->model_common_lists->getLists('localitys');
+        $data['equipment_types'] = $this->model_common_lists->getLists('equipments');
+        $data['technic_types'] = $this->model_common_lists->getLists('technics');
+        $data['injured_types'] = $this->model_common_lists->getLists('injureds');
+        $data['participant_types'] = $this->model_common_lists->getLists('participants');
 
         if ($this->user->getGroupId() != PSP_GROUP) {
-            $data['psps'] = $this->getLists('psps');
+            $data['psps'] = $this->model_common_lists->getLists('psps');
         } else {
-            $data['psps'] = $this->getUserPsp($this->user->getId());
+            $this->load->model('common/users');
+            $data['psps'] = $this->model_common_users->getUserPsp($this->user->getId());
         }
 
         if (isset($this->error['warning'])) {
@@ -196,7 +207,8 @@ class ControllerCommonPsr extends Controller {
         } elseif (!empty($psr_info)) {
             $data['psp_id'] = $psr_info['psp_id'];
         } else {
-            $data['psp_id'] = $this->getUserPsp();
+            $this->load->model('common/users');
+            $data['psp_id'] = $this->model_common_users->getUserPsp($this->user->getId());
         }
 
         if (isset($this->request->post['locality'])) {
@@ -321,127 +333,11 @@ class ControllerCommonPsr extends Controller {
 
     }
 
-    public function getLists($type) {
-        $this->load->model('common/lists');
-
-        $result_data = array();
-
-        switch ($type) {
-
-            case "psps":
-                //Виды ЧС
-                $psps = $this->model_common_lists->getPsps();
-                if ($psps) {
-                    foreach ($psps as $psp) {
-                        $result_data[] = array (
-                            'psp_id' => $psp['psp_id'],
-                            'name'       => $psp['name']
-                        );
-                    }
-                } else {
-                    $result_data = false;
-                }
-                break;
-
-            case "incident_types":
-                //Виды ЧС
-                $incident_types = $this->model_common_lists->getIncidentTypes();
-                if ($incident_types) {
-                    foreach ($incident_types as $incident_type) {
-                        $result_data[] = array (
-                            'incidenttype_id' => $incident_type['incidenttype_id'],
-                            'name'       => $incident_type['name']
-                        );
-                    }
-                } else {
-                    $result_data = false;
-                }
-            break;
-
-            case "localitys":
-                //Города и районы
-                $localitys = $this->model_common_lists->getLocalitys();
-                if ($localitys) {
-                    foreach ($localitys as $locality) {
-                        $result_data[] = array (
-                            'locality_id' => $locality['locality_id'],
-                            'name'       =>  $locality['name'],
-                            'type'       =>  $locality['type'],
-                        );
-                    }
-                } else {
-                    $result_data = false;
-                }
-            break;
-
-            case "equipments":
-                //Оборудование
-                $equipments = $this->model_common_lists->getEquipments();
-                if ($equipments) {
-                    foreach ($equipments as $equipment) {
-                        $result_data[] = array (
-                            'equipment_id' => $equipment['equipment_id'],
-                            'name'       =>  $equipment['name']
-                        );
-                    }
-                } else {
-                    $result_data = false;
-                }
-            break;
-
-            case "technics":
-                //Техника
-                $technics = $this->model_common_lists->getTechnics();
-                if ($technics) {
-                    foreach ($technics as $technic) {
-                        $result_data[] = array (
-                            'technic_type_id' => $technic['technic_id'],
-                            'name'       =>  $technic['name']
-                        );
-                    }
-                } else {
-                    $result_data = false;
-                }
-            break;
-
-            case "injureds":
-                //Типы спасения
-                $injureds = $this->model_common_lists->getInjureds();
-                if ($injureds) {
-                    foreach ($injureds as $injured) {
-                        $result_data[] = array (
-                            'injured_type_id' => $injured['injured_id'],
-                            'name'       =>  $injured['name']
-                        );
-                    }
-                } else {
-                    $result_data = false;
-                }
-            break;
-
-            case "participants":
-                //Типы участника ПСР
-                $participants = $this->model_common_lists->getParticipants();
-                if ($participants) {
-                    foreach ($participants as $participant) {
-                        $result_data[] = array (
-                            'participant_type_id' => $participant['participant_id'],
-                            'name'       =>  $participant['name']
-                        );
-                    }
-                } else {
-                    $result_data = false;
-                }
-            break;
-
-            default: $result_data = false;
-        }
-
-        return $result_data;
-
-	}
-
-	public function validateFrom() {
+    /**
+     * Проверка формы
+     * @return bool
+     * */
+    public function validateFrom() {
         if (!$this->user->hasPermission('modify', 'common/psr')) {
             $this->error['warning'] = $this->language->get('error_permission');
         }
@@ -501,53 +397,6 @@ class ControllerCommonPsr extends Controller {
         return !$this->error;
 
 
-    }
-
-    public function getUserPsp() {
-	    $this->load->model('common/users');
-
-	    $result = $this->model_common_users->getUserPsp($this->user->getId());
-
-	    return $result;
-    }
-
-    public function getSeloByDistrict() {
-
-        $this->load->model('common/psr');
-
-	    if (!isset($this->request->get['district_id'])) {
-	        return false;
-        }
-
-        $sela = $this->model_common_psr->getSeloByDistrict($this->request->get['district_id']);
-
-	    if ($sela) {
-
-	        foreach ($sela as $selo) {
-                $result[] = array (
-                    'selo_id'   =>  $selo['selo_id'],
-                    'name'   =>  $selo['name']
-                );
-            }
-
-            $this->response->addHeader('Content-Type: application/json');
-            $this->response->setOutput(json_encode($result));
-
-        } else {
-	        return false;
-        }
-    }
-
-    /**
-     * Удаление ПСР по ее id
-     * @param $psr_id
-     * @return bool
-     */
-    public function deletePsr() {
-        $this->load->model('common/psr');
-        if (isset($this->request->get['psr_id'])) {
-            return $this->model_common_psr->deletePsr((int)$this->request->get['psr_id']);
-        }
     }
 
 }

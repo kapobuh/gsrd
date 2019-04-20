@@ -10,6 +10,8 @@ class ControllerCommonFooter extends Controller {
 		} else {
 			$data['text_version'] = '';
 		}
+
+        $data['token'] = $this->session->data['token'];
 		
 		return $this->load->view('common/footer', $data);
 	}

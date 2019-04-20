@@ -455,7 +455,7 @@
         $('#locality_list').change(function(){
 			if (($('#locality_list').find(':selected').attr('alt')) == 'R') {
 				$.ajax({
-					url: '?route=common/psr/getSeloByDistrict',
+					url: '?route=common/functions/getSeloByDistrict',
 					type: 'get',
 					data: {
 						district_id: $('#locality_list').find(':selected').val(),

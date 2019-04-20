@@ -1,8 +1,23 @@
-		<div class="panel panel-default">
+<!--script src="view/javascript/psr.js" type="text/javascript"></script-->
+<div class="panel panel-default">
 			<div class="panel-heading">
 				<h3 class="panel-title"><i class="fa fa-list"></i> <?php echo $text_inbox_list_search; ?></h3>
 			</div>
 			<div class="panel-body">
+				<h3>Найдено <?php echo ($psrs_count) ? $psrs_count : '0'; ?> поисково-спасательных работ</h3>
+				<hr/>
+				<div class="row">
+					<div class="col-sm-3">
+						<h4><b>Пострадавшие: <?php echo ($injured_totals) ? $count_injureds : 0; ?></b></h4>
+						<?php if ($injured_totals) { ?>
+						<ul>
+							<?php foreach ($injured_totals as $injured_total) { ?>
+								<li><?php echo $injured_total['type']; ?> - <?php echo $injured_total['quantity']; ?></li>
+							<?php } ?>
+						</ul>
+						<?php } ?>
+					</div>
+				</div>
 				<div class="table-responsive">
 					<br/>
 					<br/>
@@ -16,7 +31,7 @@
 							<th></th>
 						</tr>
 						<?php foreach($psrs as $psr) { ?>
-						<tr class="psr-item">
+						<tr id="psr-item-<?php echo $psr['psr_id']; ?>" class="psr-item">
 							<td><span class="psr_link" alt="<?php echo $psr['psr_id']; ?>"><?php echo $psr['name']; ?></span></td>
 							<td><?php echo $psr['address']; ?></td>
 							<td><?php echo $psr['psp']; ?></td>
@@ -29,17 +44,32 @@
 							<td>
 								<p class="text-center"><?php echo $text_empty2; ?></p>
 								<br/>
-
 							</td>
 						</tr>
-
 						<?php } ?>
 					</table>
 					</div>
 			</div>
 		</div>
-		<script>
-			$(document).ready(function () {
+<script type="text/javascript">
+    /**
+     * Информация об одной ПСР
+     */
+    var admin_token = $('#admin-token').val();
+    $('.psr_link').click(function () {
+        var psr_id = $(this).attr("alt");
+        $.ajax({
+            url: '?route=common/search/getPsrInfo&token=' + admin_token,
+            type: 'get',
+            data: 'psr_id=' + psr_id,
+            beforeSend: function(){
+                $('#psr_info_modal .modal-content .modal-body').html('Загрузка...');
+                $('#psr_info_modal').modal();
+            },
+            success: function(html) {
+                $('#psr_info_modal .modal-content').html(html);
+            }
+        })
 
-            })
-		</script>
+    });
+</script>

@@ -4,6 +4,9 @@ const SPASATEL_TYPE         = '1';
 const ADMIN_GROUP           = '1';
 const PSP_GROUP             = '12';
 
+const INJURED_TYPE_SAVED    = '1';
+const INJURED_TYPE_DIED     = '0';
+
 const DISTRICT_LOCALITY_TYPE    =   'R';
 const CITY_LOCALITY_TYPE        =   'G';
 const SELO_LOCALITY_TYPE        =   'S';
