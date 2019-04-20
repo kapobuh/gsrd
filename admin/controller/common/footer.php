@@ -11,7 +11,7 @@ class ControllerCommonFooter extends Controller {
 			$data['text_version'] = '';
 		}
 
-        $data['token'] = $this->session->data['token'];
+        $data['token'] = (isset($this->session->data['token'])) ? $this->session->data['token'] : '';
 		
 		return $this->load->view('common/footer', $data);
 	}
