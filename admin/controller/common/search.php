@@ -9,7 +9,8 @@ class ControllerCommonSearch extends Controller {
     public $types_injured_in_incident = array (
         '1' => 'На воде',
         '3' => 'На бытовой основе',
-        '4' => 'При пожаре'
+        '4' => 'При пожаре',
+        '9' => 'В лесу',
     );
 
     /**
