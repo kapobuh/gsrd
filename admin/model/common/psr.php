@@ -217,7 +217,7 @@ class ModelCommonPsr extends Model {
         if (!empty($data['equipment'])) {
             $equpment_update = ", equipment = '".implode('_', $data['equipment'])."' ";
         } else {
-            $equpment_update = "";
+            $equpment_update = ", equipment = '' ";
         }
 
         $this->db->query("UPDATE " . DB_PREFIX . "psr SET participants = '". $participant . "' " . $equpment_update . " WHERE psr_id = '".(int)$psr_id."'");
@@ -286,6 +286,43 @@ class ModelCommonPsr extends Model {
         $query = $this->db->query($sql);
 
         return ($query->num_rows) ? $query->rows : null;
+    }
+
+    /**
+     * Возвращает суммарные данные по использованному оборудованию в ПСР
+     * @param $psr_ids - список пср для поиска
+     * @return array|null
+     */
+    public function getEquipmentTotals($psr_ids) {
+
+        $sql = "SELECT equipment FROM " . DB_PREFIX . "psr
+                WHERE psr_id IN (" . implode(",",$psr_ids) . ")";
+
+        $query = $this->db->query($sql);
+
+        if ($query->num_rows) {
+            $str = '';
+            $totals = array();
+            foreach ($query->rows as $psr_equipment) {
+                $str .= $psr_equipment['equipment'] . "_";
+            }
+            $str = substr($str, 0, -1);
+            $equipment_ids = explode("_", $str);
+            $equipment_ids_counts = array_count_values($equipment_ids);
+
+            $this->load->model('common/lists');
+            foreach ($this->model_common_lists->getLists('equipments') as $equipment_item) {
+                if (isset($equipment_ids_counts[$equipment_item['equipment_id']])) {
+                    $totals[] = array (
+                        'name' => $equipment_item['name'],
+                        'quantity' => $equipment_ids_counts[$equipment_item['equipment_id']]
+                    );
+                }
+            }
+            return $totals;
+        } else {
+            return null;
+        }
     }
 
 }

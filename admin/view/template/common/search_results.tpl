@@ -7,6 +7,18 @@
 				<h3>Найдено <?php echo ($psrs_count) ? $psrs_count : '0'; ?> поисково-спасательных работ</h3>
 				<hr/>
 				<div class="row">
+					<div class="col-sm-4">
+						<h4><b>Использованное оборудование</b></h4>
+						<?php if ($equipment_totals) { ?>
+						<ul>
+							<?php foreach ($equipment_totals as $equipment_total) { ?>
+							<li><?php echo $equipment_total['name']; ?> - <?php echo $equipment_total['quantity']; ?></li>
+							<?php } ?>
+						</ul>
+						<?php } else { ?>
+						<p>Оборудование не использовалось.</p>
+						<?php } ?>
+					</div>
 					<div class="col-sm-3">
 						<h4><b>Пострадавшие: <?php echo ($injured_totals) ? $count_injureds : 0; ?></b></h4>
 						<?php if ($injured_totals) { ?>
@@ -17,6 +29,7 @@
 						</ul>
 						<?php } ?>
 					</div>
+
 				</div>
 				<div class="table-responsive">
 					<br/>

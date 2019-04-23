@@ -210,9 +210,25 @@ class ControllerCommonSearch extends Controller {
                 $data['injured_totals'] = false;
             }
 
+            // Использованное оборудование
+            $equipment_totals = $this->model_common_psr->getEquipmentTotals($psr_ids);
+            if ($equipment_totals) {
+                $data['count_equipments'] = 0;
+                foreach ($equipment_totals as $equipment_total) {
+                    $data['equipment_totals'][] = array(
+                        'name' => $equipment_total['name'],
+                        'quantity' => $equipment_total['quantity']
+                    );
+                    $data['count_equipments'] += $equipment_total['quantity'];
+                }
+            } else {
+                $data['equipment_totals'] = false;
+            }
+
+
 
         } else {
-            $data['psrs'] = $data['count_injureds'] = $data['injured_totals'] = $data['psrs_count'] = false;
+            $data['psrs'] = $data['count_injureds'] = $data['injured_totals'] = $data['psrs_count'] = $data['count_equipments'] = $data['equipment_totals'] = false;
 
         }
 
