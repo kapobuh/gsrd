@@ -43,6 +43,7 @@ class ModelCommonPsr extends Model {
 	                      SET participants = '". $participant . "' " . $equpment_update . " 
 	                      WHERE psr_id = '".(int)$psr_id."'");
 
+	    // Техника
 	    if (!empty($data['technic'])) {
             foreach ($data['technic'] as $technic) {
                 $this->db->query("INSERT INTO " . DB_PREFIX . "psr_technics 
@@ -53,9 +54,11 @@ class ModelCommonPsr extends Model {
             }
         }
 
+
+        // Пострадавшие
         if (!empty($data['injured'])) {
             foreach ($data['injured'] as $injured) {
-                $birthday = date("Y",strtotime($injured['birthday']));
+                $birthday = $injured['birthday'] . '-01-01 00:00:00';
                 $this->db->query("INSERT INTO " . DB_PREFIX . "psr_injured 
                                   SET 
                                     psr_id = '". (int)$psr_id. "', 

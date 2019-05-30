@@ -175,6 +175,16 @@ class ControllerCommonSearch extends Controller {
 
         if ($results) {
 
+            $this->load->model('common/lists');
+
+            $types_injured_in_incidents = $this->model_common_lists->getLists('incident_types');
+
+            if ($types_injured_in_incidents) {
+                foreach ($types_injured_in_incidents as $types_injured_in_incident) {
+                    $types_injured_in_incident_titles[$types_injured_in_incident['incidenttype_id']] = $types_injured_in_incident['name'];
+                }
+            }
+
             $data['psrs_count'] = count($results);
 
             foreach ($results as $psr) {
@@ -201,7 +211,7 @@ class ControllerCommonSearch extends Controller {
                 $data['count_injureds'] = 0;
                 foreach ($injured_totals as $injured_total) {
                     $data['injured_totals'][] = array(
-                        'type' => $this->types_injured_in_incident[$injured_total['type_id']],
+                        'type' => $types_injured_in_incident_titles[$injured_total['type_id']],
                         'quantity' => $injured_total['quantity']
                     );
                     $data['count_injureds'] += $injured_total['quantity'];

@@ -290,7 +290,7 @@
 							<div class="col-xs-12 visible-xs"><br/></div>
 
 							<div class="col-sm-2 w14">
-								<input data-date-format="yyyy" data-view="years" data-min-view="years" data-timepicker="false" autocomplete="off" type="text"  class="form-control datepicker-here" value="<?php echo $injured['birthday']; ?>" name="injured[<?php echo $injured_row; ?>][birthday]" placeholder="<?php echo $text_birthday;?>"/>
+								<input data-date-format="yyyy" data-view="years" data-min-view="years" data-timepicker="false" autocomplete="off" type="text"  class="form-control datepicker-here" value="<?php echo $injured['birthday']; ?>" name="injured[<?php echo $injured_row; ?>][birthday]" placeholder="Год рождения"/>
 							</div>
 							<div class="col-xs-12 visible-xs"><br/></div>
 
