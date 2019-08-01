@@ -76,7 +76,20 @@ class ModelCommonPsr extends Model {
      * @return array|bool
      */
     public function getPsr($psr_id) {
-	    $query = $this->db->query("SELECT psr.psr_id, psr.type_id, psr.psp_id, a.locality_id as locality, a.street, a.house, a.appartment, psr.date_start, psr.date_end, psr.participants as participant, psr.equipment, psr.description, l.parent_id as parent_id 
+	    $query = $this->db->query("SELECT 
+                                    psr.psr_id, 
+                                    psr.type_id, 
+                                    psr.psp_id, 
+                                    a.locality_id as locality, 
+                                    a.street, 
+                                    a.house, 
+                                    a.appartment, 
+                                    psr.date_start, 
+                                    psr.date_end, 
+                                    psr.participants as participant, 
+                                    psr.equipment, 
+                                    psr.description, 
+                                    l.parent_id as parent_id 
                                    FROM nfo_psr psr 
                                     LEFT JOIN nfo_address a ON psr.address_id = a.address_id 
                                     INNER JOIN nfo_locality l ON a.locality_id = l.locality_id 
@@ -127,8 +140,8 @@ class ModelCommonPsr extends Model {
                 'street' => $query->row['street'],
                 'house' => $query->row['house'],
                 'appartment' => $query->row['appartment'],
-                'date_start' => date("d.m.Y H:s", strtotime($query->row['date_start'])),
-                'date_end' => date("d.m.Y H:s", strtotime($query->row['date_end'])),
+                'date_start' => date("d.m.Y H:i", strtotime($query->row['date_start'])),
+                'date_end' => date("d.m.Y H:i", strtotime($query->row['date_end'])),
                 'participant' => $participants,
                 'equipments' => explode("_", $query->row['equipment']),
                 'technic' => $technic,
