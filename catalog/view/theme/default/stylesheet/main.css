@@ -3176,6 +3176,7 @@ label.css-label {
     }
     .ct_product_list .clearfix .pull-right, .ct_product_list .clearfix .pull-left {
         float: none !important;
+        width: 100%;
     }
     .ct_product_list .clearfix .pull-left {
         width: 100px;
