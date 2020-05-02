@@ -22,10 +22,10 @@
         <br class="hidden-xs"/>
 
         <div class="row">
-            <div class="col-sm-8">
+            <div class="col-sm-6 col-md-8">
                 <div class="row">
                     <?php foreach ($leftProducts as $product) {  ?>
-                        <div class="col-xs-12 col-sm-6">
+                        <div class="col-sm-12 col-md-6">
                             <div class="ct_product_list latests">
                                 <a href="<?php echo $product['href']; ?>">
                                     <div class="pl_img text-center">
@@ -34,22 +34,24 @@
                                 </a>
                                 <div class="caption">
                                     <div class="box">
-                                        <a href="<?php echo $product['href']; ?>">
-                                            <div class="ct_price_product_list pull-left">
-                                                <?php if ($product['special']) { ?>
-                                                    <span class="sale_rate">
-                                                        <?php $rate = round(100-($product['special']/($product['price']/100)));
-                                                            echo '-'.$rate.'%'; ?></span>
-                                                    <span class="price-old"><?php echo $product['price']; ?></span>
-                                                    <span class="price-new"><?php echo $product['special']; ?></span>
-                                                    <small class="price-old"></small>
-                                                <?php
-                                                } else { ?>
-                                                    <span><?php echo $product['price']; ?></span>
-                                                <?php } ?>
-                                            </div>
-                                            <h5 class="text-center"><?php echo $product['name']; ?></h5>
-                                        </a>
+                                        <div class="table-cell">
+                                            <a href="<?php echo $product['href']; ?>">
+                                                <div class="ct_price_product_list pull-left">
+                                                    <?php if ($product['special']) { ?>
+                                                        <span class="sale_rate">
+                                                            <?php $rate = round(100-($product['special']/($product['price']/100)));
+                                                                echo '-'.$rate.'%'; ?></span>
+                                                        <span class="price-old"><?php echo $product['price']; ?></span>
+                                                        <span class="price-new"><?php echo $product['special']; ?></span>
+                                                        <small class="price-old"></small>
+                                                    <?php
+                                                    } else { ?>
+                                                        <span><?php echo $product['price']; ?></span>
+                                                    <?php } ?>
+                                                </div>
+                                                <h5 class="text-center"><?php echo $product['name']; ?></h5>
+                                            </a>
+                                        </div>
                                     </div>
                                     <hr>
                                     <button class="quick_order"
@@ -102,9 +104,9 @@
                         все продукты</a></p>
                 <hr/>
             </div>
-            <div class="col-sm-4 no-side-padding">
+            <div class="col-xs-12 col-sm-6 col-md-4 no-side-padding">
                 <?php foreach ($rightProducts as $product) {  ?>
-                <div class="col-xs-12">
+                <div class="col-sm-12">
                     <div class="ct_product_list latests">
                         <a href="<?php echo $product['href']; ?>">
                             <div class="pl_img text-center">
@@ -113,22 +115,24 @@
                         </a>
                         <div class="caption">
                             <div class="box">
-                                <a href="<?php echo $product['href']; ?>">
-                                    <div class="ct_price_product_list pull-left">
-                                        <?php if ($product['special']) { ?>
-                                            <span class="sale_rate">
-                                                <?php $rate = round(100-($product['special']/($product['price']/100)));
-                                                    echo '-'.$rate.'%'; ?></span>
-                                            <span class="price-old"><?php echo $product['price']; ?></span>
-                                            <span class="price-new"><?php echo $product['special']; ?></span>
-                                            <small class="price-old"></small>
-                                        <?php
-                                        } else { ?>
-                                            <span><?php echo $product['price']; ?></span>
-                                        <?php } ?>
-                                    </div>
-                                    <h5 class="text-center"><?php echo $product['name']; ?></h5>
-                                </a>
+                                <div class="table-cell">
+                                    <a href="<?php echo $product['href']; ?>">
+                                        <div class="ct_price_product_list pull-left">
+                                            <?php if ($product['special']) { ?>
+                                                <span class="sale_rate">
+                                                    <?php $rate = round(100-($product['special']/($product['price']/100)));
+                                                        echo '-'.$rate.'%'; ?></span>
+                                                <span class="price-old"><?php echo $product['price']; ?></span>
+                                                <span class="price-new"><?php echo $product['special']; ?></span>
+                                                <small class="price-old"></small>
+                                            <?php
+                                            } else { ?>
+                                                <span><?php echo $product['price']; ?></span>
+                                            <?php } ?>
+                                        </div>
+                                        <h5 class="text-center"><?php echo $product['name']; ?></h5>
+                                    </a>
+                                </div>
                             </div>
                             <hr>
                             <button class="quick_order"

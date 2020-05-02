@@ -76,8 +76,6 @@
                                 <img src="<?php echo $product['thumb']; ?>" alt="<?php echo $product['name']; ?>"
                                      title="<?php echo $product['name']; ?>"/>
                                 <?php if ($product['showAnotherPhotoLabel']) { ?>
-                                <br/>
-                                <br/>
                                 <small class="photo360 photo360-2">фото может отличаться от фактического изображения товара.</small>
                                 <?php } ?>
                             </div>
@@ -103,36 +101,38 @@
                         </a>
                         <div class="caption">
                             <div class="box">
-                                <a href="<?php echo $product['href']; ?>">
-                                    <?php if ($product['showCommingSoonLabel']) { ?>
-                                    <p class="control-label text-center">
-                                        Скоро в продаже
-                                    </p>
-                                    <?php } elseif ($product['price']) { ?>
-                                    <div class="ct_price_product_list pull-left" itemprop="offers" itemscope
-                                         itemtype="http://schema.org/Offer">
-                                        <?php if (!$product['special']) { ?>
-                                            <?php if ($product['product_id'] == OMEGA1000_PRODUCT_FOR_ACTION) { ?>
-                                                <span itemprop="price" class="price-new"><?php echo $product['price']; ?></span>
-                                                <span class="price-old"><?php echo $product['price'] * 2; ?></span>
-                                            <?php } else { ?>
-                                                <span itemprop="price"><?php echo $product['price']; ?></span>
-                                            <?php } ?>
-                                        <?php } else { ?>
-                                            <span class="sale_rate"><?php
-                                                $rate = round(100-($product['special']/($product['price']/100)));
-                                                echo '-'.$rate.'%'; ?></span>
-                                            <span itemprop="price" class="price-old"><?php echo $product['price']; ?></span>
-                                            <span class="price-new"><?php echo $product['special']; ?></span>
-                                            <small class="price-old"></small>
-                                        <?php } ?>
-                                            <span itemprop="priceCurrency" class="hidden">RUB</span>
-                                    </div>
+                                <div class="table-cell">
                                     <a href="<?php echo $product['href']; ?>">
-                                        <h5 class="text-center" itemprop="name"><?php echo $product['name']; ?></h5> 
+                                        <?php if ($product['showCommingSoonLabel']) { ?>
+                                        <p class="control-label text-center">
+                                            Скоро в продаже
+                                        </p>
+                                        <?php } elseif ($product['price']) { ?>
+                                        <div class="ct_price_product_list pull-left" itemprop="offers" itemscope
+                                             itemtype="http://schema.org/Offer">
+                                            <?php if (!$product['special']) { ?>
+                                                <?php if ($product['product_id'] == OMEGA1000_PRODUCT_FOR_ACTION) { ?>
+                                                    <span itemprop="price" class="price-new"><?php echo $product['price']; ?></span>
+                                                    <span class="price-old"><?php echo $product['price'] * 2; ?></span>
+                                                <?php } else { ?>
+                                                    <span itemprop="price"><?php echo $product['price']; ?></span>
+                                                <?php } ?>
+                                            <?php } else { ?>
+                                                <span class="sale_rate"><?php
+                                                    $rate = round(100-($product['special']/($product['price']/100)));
+                                                    echo '-'.$rate.'%'; ?></span>
+                                                <span itemprop="price" class="price-old"><?php echo $product['price']; ?></span>
+                                                <span class="price-new"><?php echo $product['special']; ?></span>
+                                                <small class="price-old"></small>
+                                            <?php } ?>
+                                                <span itemprop="priceCurrency" class="hidden">RUB</span>
+                                        </div>
+                                        <a href="<?php echo $product['href']; ?>">
+                                            <h5 class="text-center" itemprop="name"><?php echo $product['name']; ?></h5> 
+                                        </a>
+                                        <?php } ?>
                                     </a>
-                                    <?php } ?>
-                                </a>
+                                </div>
                             </div> <hr>
                                 <?php if ($product['quantity'] > 0) { ?>
                                     <button class="quick_order"

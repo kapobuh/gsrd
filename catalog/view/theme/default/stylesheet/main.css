@@ -3016,23 +3016,27 @@ label.css-label {
     box-shadow: 0px 0px 15px #0000001A;
     border: 1px solid #EEEEEE;
     border-radius: 5px;
-    padding: 0 25px 25px 25px;
-    min-height: 670px;
+    padding: 25px;
+    margin-top: 30px;
 }
 .ct_product_list .box {
     min-height: 140px;
+    display: table;
+    width: 100%;
 }
-.ct_product_list .pl_img {
-    height: 368px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
+.ct_product_list .box .table-cell {
+    display: table-cell;
+    vertical-align: bottom;
+}
+.ct_product_list .photo360 {
+    display: none;
 }
 .ct_product_list .pl_img img {
-    max-height: 368px;
     padding: 0;
     width: 100%;
+}
+.ct_product_list .pl_img {
+    height: auto;
 }
 .ct_product_list .sale_rate {
     font-family: Roboto;
@@ -3068,7 +3072,7 @@ label.css-label {
     font-weight: 600;
     color: #28477B;
     text-decoration: none;
-    margin: 10px 0 20px 0;
+    margin: 10px 0 10px 0;
     padding: 0;
     height: 100%;
     line-height: 25px;
@@ -3080,9 +3084,7 @@ label.css-label {
 }
 .ct_product_list .caption .clearfix {
     margin-top: 20px;
-    position: absolute;
-    bottom: 25px;
-    width: 79%;
+    width: 100%;
 }
 .ct_product_list .caption a {
     text-decoration: none;
@@ -3102,7 +3104,7 @@ label.css-label {
     font-size: 20px;
     color: #269AE4;
     text-decoration: underline;
-    margin: 20px 0 0 0;
+    margin: 15px 0 0 0;
     padding: 0 !important;
 }
 .ct_product_list .quick_order:hover {
@@ -3125,7 +3127,6 @@ label.css-label {
     background-color: #3BA3E6;
 }
 .ct_product_list .ct_count {
-    line-height: 65px;
     width: 100%;
     padding: 0;
     height: 100%;
@@ -3150,10 +3151,11 @@ label.css-label {
     text-align: center;
     border: none;
     background-color: #FFC80A;
-    padding: 17px 28px;
+    padding: 7px 25px;
     border-radius: 100px;
     cursor: pointer;
     height: 100%;
+    width: 100%;
 }
 .ct_product_list:hover .ct_add_to_cart, .ct_add_to_cart:hover {
     background-color: #FFDD69;
@@ -3170,25 +3172,21 @@ label.css-label {
         position: relative;
         width: 100%;
     }
-    .ct_product_list .ct_add_to_cart {
-        margin: 0 auto;
-        display: block;
-    }
-    .ct_product_list .clearfix .pull-right, .ct_product_list .clearfix .pull-left {
-        float: none !important;
-        width: 100%;
-    }
-    .ct_product_list .clearfix .pull-left {
-        width: 100px;
-        margin: 0 auto;
-    }
     .ct_product_list .box {
         min-height: 1px;
     }
-    .ct_product_list .pl_img {
-    height: 300px;
+    .ct_product_list .ct_count td:nth-child(2) {
+    min-width: 20px;
     }
     .ct_product_list {
-        min-height: 1px;
-    }
+    padding: 20px;
+    } 
+    .latests .pull-right {
+    width: auto;
+    }  
 } 
+@media (max-width: 1024px) {
+    .ct_product_list .ct_add_to_cart {
+    font-size: 18px;
+    }
+}
