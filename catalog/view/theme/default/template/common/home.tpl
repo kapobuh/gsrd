@@ -1,11 +1,6 @@
 <?php echo $header; ?>
 
 <?php echo $slideshow_module; ?>
-<div class="container-fluid page_title_bg" style="margin-top: 75px;">
-    <div class="container textcontent">
-        <h1>NORWEGIAN Fish Oil - Омега-3 в капсулах из Норвегии</h1>
-    </div>
-</div>
 <div class="container">
 <div class="row"><?php echo $column_left; ?>
     <?php if ($column_left && $column_right) { ?>
