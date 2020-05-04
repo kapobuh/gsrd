@@ -61,7 +61,11 @@
             <hr/>
 
             <?php if ($products) { ?>
-
+            <div>
+                <div>
+                    <h1><?php echo $heading_title; ?></h1>
+                </div>
+            </div>
             <div class="row catalog">
                 <?php foreach ($products as $product) { ?>
                 <div class="col-xs-12 col-sm-6  col-md-4" itemscope itemtype="http://schema.org/Product">
