@@ -66,18 +66,18 @@
                     <h1><?php echo $heading_title; ?></h1>
                 </div>
             </div>
-            <div class="row catalog">
+            <div itemscope itemtype="http://schema.org/ItemList" class="row catalog">
                 <?php foreach ($products as $product) { ?>
-                <div class="col-xs-12 col-sm-6  col-md-4" itemscope itemtype="http://schema.org/Product">
+                <div itemscope itemprop="itemListElement" itemtype="http://schema.org/Product" class="col-xs-12 col-sm-6  col-md-4">
                     <div class="ct_product_list">
-                        <a class="product-list-link" href="<?php echo $product['href']; ?>">
+                        <a itemprop="url" class="product-list-link" href="<?php echo $product['href']; ?>">
                             <?php if ($category_id == NEW_YEAR_NABORS_CATEGORY) { ?>
                             <div class="gift-bant">
                                 <img src="image/gift-bant.png" class="img-responsive" alt="Подарочная упаковка" />
                             </div>
                             <?php } ?>
                             <div class="pl_img text-center">
-                                <img src="<?php echo $product['thumb']; ?>" alt="<?php echo $product['name']; ?>"
+                                <img itemprop="image" src="<?php echo $product['thumb']; ?>" alt="<?php echo $product['name']; ?>"
                                      title="<?php echo $product['name']; ?>"/>
                                 <?php if ($product['showAnotherPhotoLabel']) { ?>
                                 <small class="photo360 photo360-2">фото может отличаться от фактического изображения товара.</small>
@@ -106,14 +106,13 @@
                         <div class="caption">
                             <div class="box">
                                 <div class="table-cell">
-                                    <a href="<?php echo $product['href']; ?>">
+                                    <a itemprop="url" href="<?php echo $product['href']; ?>">
                                         <?php if ($product['showCommingSoonLabel']) { ?>
                                         <p class="control-label text-center">
                                             Скоро в продаже
                                         </p>
                                         <?php } elseif ($product['price']) { ?>
-                                        <div class="ct_price_product_list pull-left" itemprop="offers" itemscope
-                                             itemtype="http://schema.org/Offer">
+                                        <div itemscope itemprop="offers" itemtype="http://schema.org/Offer" class="ct_price_product_list pull-left">
                                             <?php if (!$product['special']) { ?>
                                                 <?php if ($product['product_id'] == OMEGA1000_PRODUCT_FOR_ACTION) { ?>
                                                     <span itemprop="price" class="price-new"><?php echo $product['price']; ?></span>
@@ -125,14 +124,15 @@
                                                 <span class="sale_rate"><?php
                                                     $rate = round(100-($product['special']/($product['price']/100)));
                                                     echo '-'.$rate.'%'; ?></span>
-                                                <span itemprop="price" class="price-old"><?php echo $product['price']; ?></span>
-                                                <span class="price-new"><?php echo $product['special']; ?></span>
+                                                <span class="price-old"><?php echo $product['price']; ?></span>
+                                                <span itemprop="price" class="price-new"><?php echo $product['special']; ?></span>
                                                 <small class="price-old"></small>
                                             <?php } ?>
-                                                <span itemprop="priceCurrency" class="hidden">RUB</span>
+                                                <meta itemprop="priceCurrency" content="RUB">
                                         </div>
                                         <a href="<?php echo $product['href']; ?>">
-                                            <h5 class="text-center" itemprop="name"><?php echo $product['name']; ?></h5> 
+                                            <h5 itemprop="name" class="text-center"><?php echo $product['name']; ?></h5> 
+                                            <meta itemprop="description" content="<?php echo $product['name']; ?>">
                                         </a>
                                         <?php } ?>
                                     </a>

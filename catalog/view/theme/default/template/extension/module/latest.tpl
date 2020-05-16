@@ -22,34 +22,37 @@
         <br class="hidden-xs"/>
 
         <div class="row">
-            <div class="col-sm-6 col-md-8">
+            <div itemscope itemtype="http://schema.org/ItemList" class="col-sm-6 col-md-8">
                 <div class="row">
                     <?php foreach ($leftProducts as $product) {  ?>
                         <div class="col-sm-12 col-md-6">
-                            <div class="ct_product_list latests">
-                                <a href="<?php echo $product['href']; ?>">
+                            <div itemscope itemprop="itemListElement" itemtype="http://schema.org/Product" class="ct_product_list latests">
+                                <a itemprop="url" href="<?php echo $product['href']; ?>">
                                     <div class="pl_img text-center">
-                                        <img src="<?php echo $product['thumb']; ?>" alt=""/>
+                                        <img itemprop="image" src="<?php echo $product['thumb']; ?>" alt=""/>
                                     </div>
                                 </a>
                                 <div class="caption">
                                     <div class="box">
                                         <div class="table-cell">
                                             <a href="<?php echo $product['href']; ?>">
-                                                <div class="ct_price_product_list pull-left">
+                                                <div itemscope itemprop="offers" itemtype="http://schema.org/Offer" class="ct_price_product_list pull-left">
                                                     <?php if ($product['special']) { ?>
                                                         <span class="sale_rate">
                                                             <?php $rate = round(100-($product['special']/($product['price']/100)));
                                                                 echo '-'.$rate.'%'; ?></span>
                                                         <span class="price-old"><?php echo $product['price']; ?></span>
-                                                        <span class="price-new"><?php echo $product['special']; ?></span>
+                                                        <span itemprop="price" class="price-new"><?php echo $product['special']; ?></span>
+                                                        <meta itemprop="priceCurrency" content="RUB"/>
                                                         <small class="price-old"></small>
                                                     <?php
                                                     } else { ?>
-                                                        <span><?php echo $product['price']; ?></span>
+                                                        <span itemprop="price"><?php echo $product['price']; ?></span>
+                                                        <meta itemprop="priceCurrency" content="RUB" />
                                                     <?php } ?>
                                                 </div>
-                                                <h5 class="text-center"><?php echo $product['name']; ?></h5>
+                                                <h5 itemprop="name" class="text-center"><?php echo $product['name']; ?></h5>
+                                                <meta itemprop="description" content="<?php echo $product['name']; ?>">
                                             </a>
                                         </div>
                                     </div>
@@ -104,33 +107,36 @@
                         все продукты</a></p>
                 <hr/>
             </div>
-            <div class="col-xs-12 col-sm-6 col-md-4 no-side-padding">
+            <div itemscope itemtype="http://schema.org/ItemList" class="col-xs-12 col-sm-6 col-md-4 no-side-padding">
                 <?php foreach ($rightProducts as $product) {  ?>
                 <div class="col-sm-12">
-                    <div class="ct_product_list latests">
-                        <a href="<?php echo $product['href']; ?>">
+                    <div itemscope itemprop="itemListElement" itemtype="http://schema.org/Product" class="ct_product_list latests">
+                        <a itemprop="url" href="<?php echo $product['href']; ?>">
                             <div class="pl_img text-center">
-                                <img src="<?php echo $product['thumb']; ?>" alt=""/>
+                                <img itemprop="image" src="<?php echo $product['thumb']; ?>" alt=""/>
                             </div>
                         </a>
                         <div class="caption">
                             <div class="box">
                                 <div class="table-cell">
                                     <a href="<?php echo $product['href']; ?>">
-                                        <div class="ct_price_product_list pull-left">
+                                        <div itemscope itemprop="offers" itemtype="http://schema.org/Offer" class="ct_price_product_list pull-left">
                                             <?php if ($product['special']) { ?>
                                                 <span class="sale_rate">
                                                     <?php $rate = round(100-($product['special']/($product['price']/100)));
                                                         echo '-'.$rate.'%'; ?></span>
                                                 <span class="price-old"><?php echo $product['price']; ?></span>
-                                                <span class="price-new"><?php echo $product['special']; ?></span>
+                                                <span itemprop="price" class="price-new"><?php echo $product['special']; ?></span>
+                                                <meta itemprop="priceCurrency" content="RUB"/>
                                                 <small class="price-old"></small>
                                             <?php
                                             } else { ?>
-                                                <span><?php echo $product['price']; ?></span>
+                                                <span itemprop="price"><?php echo $product['price']; ?></span>
+                                                <meta itemprop="priceCurrency" content="RUB"/>
                                             <?php } ?>
                                         </div>
-                                        <h5 class="text-center"><?php echo $product['name']; ?></h5>
+                                        <h5 itemprop="name" class="text-center"><?php echo $product['name']; ?></h5>
+                                        <meta itemprop="description" content="<?php echo $product['name']; ?>">
                                     </a>
                                 </div>
                             </div>

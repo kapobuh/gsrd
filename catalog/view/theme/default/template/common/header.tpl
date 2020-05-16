@@ -7,7 +7,7 @@
 <!--[if (gt IE 9)|!(IE)]><!-->
 <html dir="<?php echo $direction; ?>" lang="<?php echo $lang; ?>">
 <!--<![endif]-->
-<head>
+<head itemscope itemtype="http://schema.org/WPHeader">
     <!-- Anti-flicker snippet (recommended)  -->
     <style>.async-hide { opacity: 0 !important} </style>
     <script>(function(a,s,y,n,c,h,i,d,e){s.className+=' '+y;h.start=1*new Date;
@@ -27,11 +27,11 @@
     <base href="<?php echo $base; ?>"/>
 
     <?php if ($description) { ?>
-    <meta name="description" content="<?php echo $description; ?>"/>
+    <meta itemprop="description" name="description" content="<?php echo $description; ?>"/>
     <?php } ?>
 
     <?php if ($keywords) { ?>
-    <meta name="keywords" content="<?php echo $keywords; ?>"/>
+    <meta itemprop="keywords" name="keywords" content="<?php echo $keywords; ?>"/>
     <?php } ?>
 
     <meta name='yandex-verification' content='4b0915898cd875bc'/>
@@ -71,7 +71,7 @@
     <meta property="og:url" content="<?php echo $opgh['url'];?>"/>
     <?php } ?>
 
-    <title><?php echo $title; ?></title>
+    <title itemprop="headline"><?php echo $title; ?></title>
 
     <?php echo $header_scripts; ?>
 
@@ -113,28 +113,40 @@
         </div>
     </div>
 
-    <div id="top" class="container">
+    <div itemscope itemtype="http://schema.org/Organization" id="top" class="container">
         <div class="row">
             <p class="visible-xs"><br><br></p>
             <div class="col-xs-6 col-xs-offset-3 col-sm-3 col-sm-offset-0 col-md-3">
-                <div id="logo" class="text-center">
+                <div id="logo" class="text-center" >
                     <?php if (!empty($logo_href)) { ?>
-                    <a href="<?php echo $logo_href; ?>">
-                        <img class="img-responsive" src="image/<?php echo $logo; ?>" alt="NORWEGIAN Fish Oil">
+                    <a itemprop="logo" href="<?php echo $logo_href; ?>" itemprop="url">
+                        <img class="img-responsive" src="image/<?php echo $logo; ?>" alt="NORWEGIAN Fish Oil" >
                     </a>
                     <?php } else { ?>
-                        <img class="img-responsive" src="image/<?php echo $logo; ?>" alt="NORWEGIAN Fish Oil">
+                        <img itemprop="logo" class="img-responsive" src="image/<?php echo $logo; ?>" alt="NORWEGIAN Fish Oil" >
                     <?php }?>
                 </div>
             </div>
             <div class="add_text col-md-3 visible-xl">
                 <p>Омега-3 из Норвегии.<br>Производим с 1936 года</p>
             </div>
-                
+
+            <!-- Hidden block schema only-->
+            <div style="position: absolute; opacity: 0; visibility: hidden;">
+                <p itemprop="name" >NORWEGIAN Fish Oil</p>
+                <div itemprop="address" itemscope="" itemtype="http://schema.org/PostalAddress">  
+                    <span itemprop="postalCode">21357</span>, 
+                    <span itemprop="addressCountry">Россия</span>, 
+                    <span itemprop="addressRegion">Московская область</span>, 
+                    <span itemprop="addressLocality">Москва</span>, 
+                    <span itemprop="streetAddress">Верейская, д.29 стр.134, БЦ Верейская Плаза 3</span>
+                </div> 
+            </div>
+            <!-- End Hidden block schema only-->
 
             <div class="col-sm-2 hidden-xs">
-                <div class="pull-right text-left top_phone">
-                    <p><a href="tel:+7 (800) 707 88 97"><?php echo $telephone; ?></a></p>
+                <div class="pull-right text-left top_phone" >
+                    <p><a itemprop="telephone" href="tel:+7 (800) 707 88 97" ><?php echo $telephone; ?></a></p>
                     <span>Звонок бесплатный</span>
                 </div>
             </div>

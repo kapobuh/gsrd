@@ -29,6 +29,7 @@
 
         <div id="content-transp" class="<?php echo $class; ?>"><?php echo $content_top; ?>
             <div id="product" class="row product_top" itemscope itemtype="http://schema.org/Product">
+                <meta itemprop="name" content="<?php echo $heading_title; ?>">
                 <div class="col-sm-5 col-md-5">
 
 
@@ -93,7 +94,6 @@
                             <a href="<?php echo $popup; ?>" class="fancybox" rel="group_2"><img src="<?php echo $thumb; ?>"
                                                                                   title="<?php echo $heading_title; ?>"
                                                                                   alt="<?php echo $heading_title; ?>"
-                                                                                  itemprop="image"
                                                                                   class="img-responsive"/></a>
                         </div>
                         <?php if ($showAnotherPhotoLabel) { ?>
@@ -161,7 +161,7 @@
                                         <p class="price">
                                             <?php if (!$special) { ?>
 
-                                            <span class="only-price" itemprop="price"><?php echo $price; ?></span>
+                                            <span itemprop="price" class="only-price"><?php echo $price; ?></span>
                                             <?php } else { ?>
                                             
                                             <span class="sale_rate"><?php
@@ -174,7 +174,7 @@
                                             <?php if ($tax) { ?>
                                             <span class="price-tax"><?php echo $text_tax; ?> <?php echo $tax; ?></span>
                                             <?php } ?>
-                                            <span class="hidden" itemprop="priceCurrency">RUB</span>
+                                            <meta itemprop="priceCurrency" content="RUB">
                                         </p>
                                     </div>
                                 </div>
@@ -320,6 +320,45 @@
     </div>
 
 </div>
+
+<script>
+fbq('track', 'ViewContent', {
+value: <?php  if (!$special) {$pricenocurrency = $price; }else{$pricenocurrency = $special;}     $pricenocurrency  = preg_replace( '/\D/', '', $pricenocurrency ); echo $pricenocurrency ;?>,
+currency: 'RUR',
+content_ids: <?php echo $product_id; ?>,
+content_type: "<?php echo $category_name; ?>",
+});
+
+
+let prod_prc = <?php  if (!$special) {$pricenocurrency = $price; }else{$pricenocurrency = $special;}     $pricenocurrency  = preg_replace( '/\D/', '', $pricenocurrency ); echo $pricenocurrency ;?>; 
+let cont_id = <?php echo $product_id; ?>; 
+let cont_type = "<?php echo $category_name; ?>"; 
+</script>
+
+<script>
+$(document).ready(function(){
+	$('#button-cart').click(function(){
+		
+		fbq('track', 'AddToCart', {
+			value: parseInt($('#ct_count_val').html()) * prod_prc,
+			currency: 'RUR',
+			contents: [
+			{
+			id: cont_id,
+			quantity: parseInt($('#ct_count_val').html())
+			}
+			],
+			content_ids: cont_id,
+			content_type: cont_type,
+		});
+
+	
+	})
+
+
+})
+
+</script>
 
 
 <div class="container">
